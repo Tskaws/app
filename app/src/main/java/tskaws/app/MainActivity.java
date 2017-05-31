@@ -11,3 +11,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 }
+
+/* I love you all */
+    // ~Levi~ //
