@@ -40,7 +40,6 @@ public class Crawler {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		System.out.println(getFeed());
 		InputSource is = new InputSource(new StringReader(getFeed()));
 		Document doc = builder.parse(is);
 
