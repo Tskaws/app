@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Application {
-	private List<Activity> activityList;
+	private List<EventItem> eventList;
 	public Application() {
-		this.activityList = new ArrayList<>();
+		this.eventList = new ArrayList<>();
 	}
 	private EventItem eventItems = new EventItem();
 	private String user;
