@@ -1,4 +1,4 @@
-package com.tskaws;
+package tskaws.app;
 
 public class Activity {
 

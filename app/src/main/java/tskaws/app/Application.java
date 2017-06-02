@@ -1,20 +1,13 @@
-package com.tskaws;
+package tskaws.app;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import tskaws.app.EventItem;
-
 public class Application {
-	private List<com.tskaws.Activity> activityList;
+	private List<Activity> activityList;
 	public Application() {
 		this.activityList = new ArrayList<>();
 	}
-	public void start() throws IOException {
-		System.out.println(com.tskaws.Crawler.getFeed());
-	}
-
 	private EventItem eventItems = new EventItem();
 	private String user;
 
@@ -32,5 +25,12 @@ public class Application {
 
 	public void setUser(String user) {
 		this.user = user;
+	}
+	public static void main(String[] args) {
+		try {
+			Crawler.crawl();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

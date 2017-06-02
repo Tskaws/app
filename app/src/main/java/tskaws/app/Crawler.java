@@ -1,4 +1,4 @@
-package com.tskaws;
+package tskaws.app;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,40 +33,33 @@ public class Crawler {
 			result.append(line);
 		}
 		rd.close();
-		return result.toString();
+		return result.toString().replaceAll("[^\\x20-\\x7e]", "");
 	}
 
 	static void crawl() throws IOException, SAXException, ParserConfigurationException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
+		System.out.println(getFeed());
 		InputSource is = new InputSource(new StringReader(getFeed()));
 		Document doc = builder.parse(is);
 
-		//optional, but recommended
-		//read this - http://stackoverflow.com/questions/13786607/normalization-in-dom-parsing-with-java-how-does-it-work
 		doc.getDocumentElement().normalize();
-		System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
 
 		NodeList nList = doc.getElementsByTagName("item");
-
-		System.out.println("----------------------------");
 
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 
 			Node nNode = nList.item(temp);
 
-			System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-
 				Element eElement = (Element) nNode;
-
-				//System.out.println("Staff id : " + eElement.getAttribute("id"));
 				System.out.println("Title : " + eElement.getElementsByTagName("title").item(0).getTextContent().trim());
+				System.out.println("GUID : " + eElement.getElementsByTagName("guid").item(0).getTextContent().trim());
 				System.out.println("Description : " + eElement.getElementsByTagName("description").item(0).getTextContent().trim());
 				System.out.println("Category : " + eElement.getElementsByTagName("category").item(0).getTextContent().trim());
 				System.out.println("Link : " + eElement.getElementsByTagName("link").item(0).getTextContent().trim());
+				System.out.println("URL : " + eElement.getElementsByTagName("enclosure").item(0).getAttributes().getNamedItem("url").getNodeValue().trim());
 			}
 		}
 	}
