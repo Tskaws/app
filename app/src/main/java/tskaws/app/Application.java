@@ -5,32 +5,29 @@ import java.util.List;
 
 public class Application {
 	private List<EventItem> eventList;
+
 	public Application() {
 		this.eventList = new ArrayList<>();
 	}
-	private EventItem eventItems = new EventItem();
-	private String user;
 
-	public EventItem getEventItems() {
-		return eventItems;
+	public List<EventItem> getEventItems() {
+		return eventList;
 	}
 
-	public void setEventItems(EventItem eventItems) {
-		this.eventItems = eventItems;
+	public void setEventItems(List<EventItem> eventItems) {
+		this.eventList = eventItems;
 	}
 
-	public String getUser() {
-		return user;
-	}
-
-	public void setUser(String user) {
-		this.user = user;
-	}
 	public static void main(String[] args) {
+		Application main = new Application();
 		try {
-			Crawler.crawl();
+			main.setEventItems(Crawler.crawl());
 		} catch(Exception e) {
 			e.printStackTrace();
+		}
+
+		for(EventItem item : main.getEventItems()) {
+			System.out.println(item.toString());
 		}
 	}
 }

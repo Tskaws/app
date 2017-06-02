@@ -14,6 +14,10 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -36,7 +40,7 @@ public class Crawler {
 		return result.toString().replaceAll("[^\\x20-\\x7e]", "");
 	}
 
-	static void crawl() throws IOException, SAXException, ParserConfigurationException {
+	static List<EventItem> crawl() throws IOException, SAXException, ParserConfigurationException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -47,19 +51,43 @@ public class Crawler {
 
 		NodeList nList = doc.getElementsByTagName("item");
 
+		List<EventItem> result = new ArrayList<>();
+		SimpleDateFormat parser = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz");
+
 		for (int temp = 0; temp < nList.getLength(); temp++) {
 
 			Node nNode = nList.item(temp);
 
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element eElement = (Element) nNode;
-				System.out.println("Title : " + eElement.getElementsByTagName("title").item(0).getTextContent().trim());
-				System.out.println("GUID : " + eElement.getElementsByTagName("guid").item(0).getTextContent().trim());
-				System.out.println("Description : " + eElement.getElementsByTagName("description").item(0).getTextContent().trim());
-				System.out.println("Category : " + eElement.getElementsByTagName("category").item(0).getTextContent().trim());
-				System.out.println("Link : " + eElement.getElementsByTagName("link").item(0).getTextContent().trim());
-				System.out.println("URL : " + eElement.getElementsByTagName("enclosure").item(0).getAttributes().getNamedItem("url").getNodeValue().trim());
+
+				String imageUrl = null;
+				Date date = null;
+
+				try {
+					imageUrl = eElement.getElementsByTagName("enclosure").item(0).getAttributes().getNamedItem("url").getNodeValue().trim();
+				} catch (Exception e) {}
+
+				try {
+					date = parser.parse(eElement.getElementsByTagName("pubDate").item(0).getTextContent().trim());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				EventItem event = new EventItem(
+					eElement.getElementsByTagName("guid").item(0).getTextContent().trim(),
+					eElement.getElementsByTagName("title").item(0).getTextContent().trim(),
+					date,
+					eElement.getElementsByTagName("description").item(0).getTextContent().trim(),
+					eElement.getElementsByTagName("category").item(0).getTextContent().trim(),
+					eElement.getElementsByTagName("link").item(0).getTextContent().trim(),
+					imageUrl
+				);
+
+				result.add(event);
 			}
 		}
+
+		return result;
 	}
 }

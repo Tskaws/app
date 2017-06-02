@@ -1,5 +1,7 @@
 package tskaws.app;
 
+import java.util.Date;
+
 /**
  * Created by jj_re on 5/31/2017.
  */
@@ -7,11 +9,13 @@ package tskaws.app;
 public class EventItem {
 
     // Class member variables
+    private String guid;
     private String title;
-    private String date;
+    private Date date;
     private String description;
     private String category;
     private String link;
+    private String imageUrl;
 
     /*
     private Object pictures1;
@@ -19,19 +23,23 @@ public class EventItem {
     */
 
     public EventItem(){
+        this.guid = "";
         this.title = "";
-        this.date = "";
+        this.date = null;
         this.description = "";
         this.category = "";
         this.link = "";
+        this.imageUrl = "";
     }
 
-    public EventItem(String title, String date, String description, String category, String link) {
+    public EventItem(String guid, String title, Date date, String description, String category, String link, String imageUrl) {
+        this.guid = guid;
         this.title = title;
         this.date = date;
         this.description = description;
         this.category = category;
         this.link = link;
+        this.imageUrl = imageUrl;
     }
 
     // Getter for title
@@ -88,4 +96,17 @@ public class EventItem {
         this.pictures2 = pictures2;
     }
     */
+
+    @Override
+    public String toString() {
+        return "EventItem {" +
+                "\n guid='" + guid + '\'' +
+                ",\n title='" + title + '\'' +
+                ",\n date='" + date + '\'' +
+                ",\n description='" + description + '\'' +
+                ",\n category='" + category + '\'' +
+                ",\n link='" + link + '\'' +
+                ",\n imageUrl='" + imageUrl + '\'' +
+                "\n}";
+    }
 }
