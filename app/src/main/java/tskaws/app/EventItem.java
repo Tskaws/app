@@ -16,6 +16,7 @@ public class EventItem {
     private String category;
     private String link;
     private String imageUrl;
+    private boolean isStarred;
 
     /*
     private Object pictures1;
@@ -30,6 +31,7 @@ public class EventItem {
         this.category = "";
         this.link = "";
         this.imageUrl = "";
+        this.isStarred = false;
     }
 
     public EventItem(String guid, String title, Date date, String description, String category, String link, String imageUrl) {
@@ -40,6 +42,7 @@ public class EventItem {
         this.category = category;
         this.link = link;
         this.imageUrl = imageUrl;
+        this.isStarred = false;
     }
 
     // Getter for title
