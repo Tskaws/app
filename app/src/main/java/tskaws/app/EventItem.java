@@ -6,14 +6,6 @@ package tskaws.app;
 
 public class EventItem {
 
-    public EventItem(){
-        this.title = "";
-        this.date = "";
-        this.description = "";
-        this.category = "";
-        this.link = "";
-    }
-
     // Class member variables
     private String title;
     private String date;
@@ -25,6 +17,22 @@ public class EventItem {
     private Object pictures1;
     private Object pictures2;
     */
+
+    public EventItem(){
+        this.title = "";
+        this.date = "";
+        this.description = "";
+        this.category = "";
+        this.link = "";
+    }
+
+    public EventItem(String title, String date, String description, String category, String link) {
+        this.title = title;
+        this.date = date;
+        this.description = description;
+        this.category = category;
+        this.link = link;
+    }
 
     // Getter for title
     public String getTitle() {
