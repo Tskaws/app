@@ -45,60 +45,50 @@ public class EventItem {
         this.isStarred = false;
     }
 
-    // Getter for title
+    public String getGuid() {
+        return guid;
+    }
+
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
+
+    public boolean isStarred() {
+        return isStarred;
+    }
+
+    public void setStarred(boolean starred) {
+        isStarred = starred;
+    }
+
     public String getTitle() {
         return title;
     }
-    // Setter for title
     public void setTitle(String title) {
         this.title = title;
     }
 
-    // Getter for description
     public String getDescription() {
         return description;
     }
-    // Setter for description
     public void setDescription(String description) {
         this.description = description;
     }
 
-    // Getter for Category
     public String getCategory() {
         return category;
     }
-    // Setter for Category
     public void setCategory(String category) {
         this.category = category;
     }
 
-    // Getter for link
     public String getLink() {
         return link;
     }
-    // Setter for link
     public void setLink(String link) {
         this.link = link;
     }
 
-    /*  I commented these out until we make the object for pictures
-
-    public String getPictures1() {
-        return pictures1;
-    }
-
-    public void setPictures1(String pictures1) {
-        this.pictures1 = pictures1;
-    }
-
-    public String getPictures2() {
-        return pictures2;
-    }
-
-    public void setPictures2(String pictures2) {
-        this.pictures2 = pictures2;
-    }
-    */
 
     @Override
     public String toString() {
