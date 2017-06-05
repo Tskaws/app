@@ -2,8 +2,9 @@ package tskaws.app;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
-public class Application {
+public class Application extends Observable {
 	private List<EventItem> eventList;
 
 	public Application() {
@@ -29,5 +30,36 @@ public class Application {
 		for(EventItem item : main.getEventItems()) {
 			System.out.println(item.toString());
 		}
+	}
+
+	public void starEventItem(EventItem item, boolean starred) {
+		boolean found = false;
+		for(EventItem iter : eventList) {
+			if (iter.getGuid() == item.getGuid()) {
+				iter.setStarred(starred);
+				found = true;
+				break;
+			}
+		}
+
+		if (found) {
+			setChanged();
+		}
+	}
+
+	public void setChanged() {
+		super.setChanged();
+		setChanged();
+		notifyObservers();
+		save();
+	}
+
+	public void save() {
+		// Serialize to JSON
+		// save to disk
+	}
+
+	public static Application restore() {
+		//Application app = Application.restore();
 	}
 }
