@@ -24,14 +24,15 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            app:tabBackground="@color/blueBYUI"
+            app:tabSelectedTextColor="@android:color/darker_gray"
+            app:tabTextColor="@android:color/background_light">
 
             <android.support.design.widget.TabItem
                 android:id="@+id/feed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="feed"
-                />
+                android:text="feed" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/trending"
