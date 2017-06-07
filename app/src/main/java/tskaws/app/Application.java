@@ -61,5 +61,6 @@ public class Application extends Observable {
 
 	public static Application restore() {
 		//Application app = Application.restore();
+		return new Application();
 	}
 }
