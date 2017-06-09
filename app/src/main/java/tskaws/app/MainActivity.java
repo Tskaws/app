@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-
+        Application app = Application.restore();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

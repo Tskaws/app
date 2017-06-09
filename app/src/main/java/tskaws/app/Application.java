@@ -1,8 +1,13 @@
 package tskaws.app;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+
+import javax.xml.parsers.ParserConfigurationException;
 
 public class Application extends Observable {
 	private List<EventItem> eventList;
@@ -17,19 +22,7 @@ public class Application extends Observable {
 
 	public void setEventItems(List<EventItem> eventItems) {
 		this.eventList = eventItems;
-	}
-
-	public static void main(String[] args) {
-		Application main = new Application();
-		try {
-			main.setEventItems(Crawler.crawl());
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		for(EventItem item : main.getEventItems()) {
-			System.out.println(item.toString());
-		}
+		setChanged();
 	}
 
 	public void starEventItem(EventItem item, boolean starred) {
@@ -49,7 +42,6 @@ public class Application extends Observable {
 
 	public void setChanged() {
 		super.setChanged();
-		setChanged();
 		notifyObservers();
 		save();
 	}
@@ -60,8 +52,11 @@ public class Application extends Observable {
 	}
 
 	public static Application restore() {
-		//Application app = Application.restore();
-		return new Application();
+		Application app = new Application();
+		//app.setEventItems(/*Restore from json*/);
+		Crawler crawler = new Crawler(app);
+		Thread thread = new Thread(crawler);
+		thread.start();
+		return app;
 	}
-
 }
