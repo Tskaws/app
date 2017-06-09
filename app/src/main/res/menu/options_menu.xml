@@ -4,5 +4,8 @@
         android:title="@string/search_title"
         android:icon="@drawable/ic_search"
         android:showAsAction="collapseActionView|ifRoom"
-        android:actionViewClass="android.widget.SearchView" />
+        android:actionViewClass="android.widget.SearchView"
+        android:iconifiedByDefault="false"
+        android:queryHint="Explore Activities" />
+
 </menu>

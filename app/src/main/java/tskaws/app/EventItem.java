@@ -1,5 +1,12 @@
 package tskaws.app;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.CalendarContract;
+
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -89,6 +96,36 @@ public class EventItem {
         this.link = link;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public Intent addToCalendar() {
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.setTime(this.getDate());
+        Calendar endTime = Calendar.getInstance();
+        beginTime.setTime(this.getDate());
+        Intent intent = new Intent(Intent.ACTION_INSERT)
+                .setData(CalendarContract.Events.CONTENT_URI)
+                .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
+                .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
+                .putExtra(CalendarContract.Events.TITLE, this.getTitle())
+                .putExtra(CalendarContract.Events.DESCRIPTION,this.getDescription())
+                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+        return intent;
+    }
 
     @Override
     public String toString() {
@@ -102,4 +139,5 @@ public class EventItem {
                 ",\n imageUrl='" + imageUrl + '\'' +
                 "\n}";
     }
+
 }

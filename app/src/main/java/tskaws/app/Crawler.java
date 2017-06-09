@@ -23,10 +23,27 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class Crawler {
+public class Crawler implements Runnable {
 	private static String urlString = "http://calendar.byui.edu/RSSFeeds.aspx?data=tq9cbc8b%2btuQeZGvCTEMSP%2bfv3SYIrjQ3VTAXA335bE0WtJCqYU4mp9MMtuSlz6MRZ4LbMUU%2fO4%3d";
+	public Application app;
 
-	static String getFeed() throws IOException {
+	public Crawler(Application app) {
+		this.app = app;
+	}
+
+	public void run() {
+		try {
+			app.setEventItems(crawl());
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String getFeed() throws IOException {
 		StringBuilder result = new StringBuilder();
 		URL url = new URL(Crawler.urlString);
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -40,7 +57,7 @@ public class Crawler {
 		return result.toString().replaceAll("[^\\x20-\\x7e]", "");
 	}
 
-	static List<EventItem> crawl() throws IOException, SAXException, ParserConfigurationException {
+	public List<EventItem> crawl() throws IOException, SAXException, ParserConfigurationException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
