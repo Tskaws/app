@@ -53,8 +53,9 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // Using the row.xml layout create an adapter for the strings to
-    // adapt the list for display
+    /** Using the row.xml layout create an adapter for the strings to
+      *  adapt the list for display. Code inspired by https://www.youtube.com/watch?v=D0or0X12FMM
+     **/
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
         String myTitles[];
