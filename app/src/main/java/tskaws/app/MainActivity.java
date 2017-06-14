@@ -21,12 +21,6 @@ import com.google.gson.Gson;
 public class MainActivity extends AppCompatActivity {
 
     ListView list;
-    String[] titles = new String[2];
-    String[] description = new String[2];
-    MainActivity.MyAdapter adapter = null;
-    Application app = null;
-
-    ListView list;
     MainActivity.MyAdapter adapter = null;
     Application app = null;
 
