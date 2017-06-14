@@ -18,7 +18,7 @@ import java.util.Observable;
 import java.util.Observer;
 import com.google.gson.Gson;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Observer {
 
     ListView list;
     MainActivity.MyAdapter adapter = null;
