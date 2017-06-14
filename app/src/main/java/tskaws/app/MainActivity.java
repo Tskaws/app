@@ -2,6 +2,7 @@ package tskaws.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -12,8 +13,14 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import java.net.URL;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Formatter;
 import java.util.Observable;
 import java.util.Observer;
 import com.google.gson.Gson;
@@ -113,8 +120,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
             TextView myTitle = (TextView) row.findViewById(R.id.text1);
             TextView myDescription = (TextView) row.findViewById(R.id.text2);
+            TextView myDate = (TextView) row.findViewById(R.id.date);
+            ImageView myLogo = (ImageView) row.findViewById(R.id.logo);
             myTitle.setText(item.getTitle());
             myDescription.setText(item.getDescription());
+
+            Format formatter = new SimpleDateFormat("MMMM dd, yyyy");
+            String theDate = formatter.format(item.getDate());
+            myDate.setText(theDate);
 
             return row;
         }
