@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -13,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -60,6 +61,17 @@ public class MainActivity extends AppCompatActivity {
         searchView.setIconifiedByDefault(false);
         */
         return true;
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        // Load the existing Application from SharedPreferences
+        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+
+        Gson gson = new Gson();
+        String json = myPrefs.getString("Application", "");
+        app = gson.fromJson(json, Application.class);
     }
     @Override
     public void onStop(){
