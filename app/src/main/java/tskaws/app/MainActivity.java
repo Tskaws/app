@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
         Application app = Application.restore();
+        app.getEventItems().get(0).addToCalendar();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

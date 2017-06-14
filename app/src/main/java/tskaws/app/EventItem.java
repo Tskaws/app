@@ -118,12 +118,10 @@ public class EventItem {
         Calendar endTime = Calendar.getInstance();
         beginTime.setTime(this.getDate());
         Intent intent = new Intent(Intent.ACTION_INSERT)
-                .setData(CalendarContract.Events.CONTENT_URI)
                 .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, beginTime.getTimeInMillis())
                 .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, endTime.getTimeInMillis())
                 .putExtra(CalendarContract.Events.TITLE, this.getTitle())
-                .putExtra(CalendarContract.Events.DESCRIPTION,this.getDescription())
-                .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY);
+                .putExtra(CalendarContract.Events.DESCRIPTION,this.getDescription());
         return intent;
     }
 
