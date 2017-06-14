@@ -19,7 +19,6 @@ public class Application extends Observable {
 
 	public void setEventItems(List<EventItem> eventItems) {
 		this.eventList = eventItems;
-		setChanged();
 	}
 
 	public void starEventItem(EventItem item, boolean starred) {
@@ -52,9 +51,18 @@ public class Application extends Observable {
 	public static Application restore() {
 		Application app = new Application();
 		//app.setEventItems(/*Restore from json*/);
+
+		app.getEventItems().add(new EventItem());
+		app.getEventItems().add(new EventItem());
 		Crawler crawler = new Crawler(app);
 		Thread thread = new Thread(crawler);
 		thread.start();
+		try {
+			thread.join();
+			app.setChanged();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return app;
 	}
 }

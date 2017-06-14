@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,7 +14,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-
+import java.util.Observable;
+import java.util.Observer;
 import com.google.gson.Gson;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,25 +23,25 @@ public class MainActivity extends AppCompatActivity {
     ListView list;
     String[] titles = new String[2];
     String[] description = new String[2];
-    Application app;
+    MainActivity.MyAdapter adapter = null;
+    Application app = null;
+
+    ListView list;
+    MainActivity.MyAdapter adapter = null;
+    Application app = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-        app = Application.restore();
-
-        // Testing Dummies
-        titles[0]= "Ropes Course";
-        description[0] = "Climb stuff";
-        titles[1]= "Date Night";
-        description[1] = "Date women";
+        this.app = Application.restore();
+        app.addObserver((Observer) this);
 
         // Populate the list
         list = (ListView) findViewById(R.id.events);
-        MainActivity.MyAdapter adapter = new MainActivity.MyAdapter(this, titles, description);
-        list.setAdapter(adapter);
+        this.adapter = new MainActivity.MyAdapter(this, app);
+        list.setAdapter(this.adapter);
     }
 
     /** SearchBar
@@ -84,29 +87,40 @@ public class MainActivity extends AppCompatActivity {
         myPrefsEditor.commit();
     }
 
+    public void update(Observable o, Object arg) {
+        //this.adapter.notifyDataSetChanged();
+        //this.adapter.clear();
+        this.adapter.reload();
+    }
+
     /** Using the row.xml layout create an adapter for the strings to
       *  adapt the list for display. Code inspired by https://www.youtube.com/watch?v=D0or0X12FMM
      **/
-    class MyAdapter extends ArrayAdapter<String> {
+    class MyAdapter extends ArrayAdapter<EventItem> {
         Context context;
-        String myTitles[];
-        String myDescription[];
+        Application app;
 
-        MyAdapter(Context c, String[] titles, String[] description) {
-            super(c, R.layout.row, R.id.text1, titles);
+        MyAdapter(Context c, Application app) {
+            super(c, R.layout.row, R.id.text1, app.getEventItems());
             this.context = c;
-            this.myTitles = titles;
-            this.myDescription = description;
+            this.app = app;
+        }
+
+        public void reload() {
+
+            notifyDataSetChanged();
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            EventItem item = this.app.getEventItems().get(position);
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.row, parent, false);
+
             TextView myTitle = (TextView) row.findViewById(R.id.text1);
             TextView myDescription = (TextView) row.findViewById(R.id.text2);
-            myTitle.setText(titles[position]);
-            myDescription.setText(description[position]);
+            myTitle.setText(item.getTitle());
+            myDescription.setText(item.getDescription());
 
             return row;
         }

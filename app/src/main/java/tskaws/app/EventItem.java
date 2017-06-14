@@ -32,9 +32,9 @@ public class EventItem {
 
     public EventItem(){
         this.guid = "";
-        this.title = "";
+        this.title = "Untitled Event";
         this.date = null;
-        this.description = "";
+        this.description = "Undescribed Event";
         this.category = "";
         this.link = "";
         this.imageUrl = "";
