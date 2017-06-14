@@ -30,19 +30,27 @@ public class MainActivity extends AppCompatActivity {
 
         // Testing Dummies
         titles[0]= "Ropes Course";
-        description[0] = "Description";
+        description[0] = "Climb stuff";
         titles[1]= "Date Night";
-        description[1] = "Description";
+        description[1] = "Date women";
 
         // Populate the list
         list = (ListView) findViewById(R.id.events);
         MainActivity.MyAdapter adapter = new MainActivity.MyAdapter(this, titles, description);
         list.setAdapter(adapter);
     }
+
+    /** SearchBar
+     * This is the customization work-in-progress of the search feature
+     * being in the app bar.
+     * @param menu
+     * @return
+     **/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
+
 
         /*
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);

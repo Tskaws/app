@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">app</string>
-    <string name="feed">feed</string>
-    <string name="trending">trending</string>
-    <string name="favorites">favorites</string>
-    <string name="search_title">Explore Activities</string>
+    <string name="tab_feed">feed</string>
+    <string name="tab_trending">trending</string>
+    <string name="tab_favorites">favorites</string>
+    <string name="search_hint">Explore Activities</string>
 </resources>

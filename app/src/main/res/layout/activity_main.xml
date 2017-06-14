@@ -34,19 +34,19 @@
                 android:id="@+id/feed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/feed" />
+                android:text="@string/tab_feed" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/trending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/trending" />
+                android:text="@string/tab_trending" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/favorites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/favorites" />
+                android:text="@string/tab_favorites" />
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
 
