@@ -1,10 +1,10 @@
 package tskaws.app;
 
-import android.app.SearchManager;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,13 +19,14 @@ public class MainActivity extends AppCompatActivity {
     ListView list;
     String[] titles = new String[2];
     String[] description = new String[2];
+    Application app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-        Application app = Application.restore();
+        app = Application.restore();
 
         // Testing Dummies
         titles[0]= "Ropes Course";
@@ -51,6 +52,16 @@ public class MainActivity extends AppCompatActivity {
         searchView.setIconifiedByDefault(false);
         */
         return true;
+    }
+    @Override
+    public void onStop(){
+        super.onStop();
+
+        // Save the EventList as a JSON string
+        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
+        myPrefsEditor.putString("Application", app.sendAppToJson());
+        myPrefsEditor.commit();
     }
 
     /** Using the row.xml layout create an adapter for the strings to

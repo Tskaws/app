@@ -1,13 +1,10 @@
 package tskaws.app;
 
-import org.xml.sax.SAXException;
+import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 public class Application extends Observable {
 	private List<EventItem> eventList;
@@ -43,12 +40,13 @@ public class Application extends Observable {
 	public void setChanged() {
 		super.setChanged();
 		notifyObservers();
-		save();
 	}
 
-	public void save() {
+	public String sendAppToJson() {
 		// Serialize to JSON
-		// save to disk
+		Gson gson = new Gson();
+		String AppJsonString = gson.toJson(this);
+		return AppJsonString;
 	}
 
 	public static Application restore() {
