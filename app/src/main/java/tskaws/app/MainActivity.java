@@ -2,7 +2,9 @@ package tskaws.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -128,9 +131,35 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
             Format formatter = new SimpleDateFormat("MMMM dd, yyyy");
             String theDate = formatter.format(item.getDate());
-            myDate.setText(theDate);
+            new DownloadImage((ImageView) row.findViewById(R.id.logo)).execute(item.getImageUrl());
 
             return row;
+        }
+    }
+
+    class DownloadImage extends AsyncTask<String, Void, Bitmap> {
+        ImageView image;
+
+        public DownloadImage(ImageView image){
+            this.image = image;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e){
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            image.setImageBitmap(result);
         }
     }
 }
