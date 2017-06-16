@@ -133,7 +133,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
             String theDate = formatter.format(item.getDate());
             myDate.setText(theDate);
 
-            new DownloadImage((ImageView) row.findViewById(R.id.logo)).execute(item.getImageUrl());
+            if (item.getImageUrl() != null) {
+                new DownloadImage((ImageView) row.findViewById(R.id.logo)).execute(item.getImageUrl());
+            }
 
             return row;
         }
