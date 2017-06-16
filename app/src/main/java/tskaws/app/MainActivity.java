@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
-        this.app = Application.restore();
+        this.app = Application.restore(getApplicationContext());
         app.addObserver((Observer) this);
 
         // Populate the list
@@ -108,7 +108,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         }
 
         public void reload() {
-
+            this.clear();
+            this.addAll(app.getEventItems());
             notifyDataSetChanged();
         }
 

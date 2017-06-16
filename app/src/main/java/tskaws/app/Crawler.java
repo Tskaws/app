@@ -1,5 +1,9 @@
 package tskaws.app;
 
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
+import com.koushikdutta.ion.Response;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -7,12 +11,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,7 +22,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-public class Crawler implements Runnable {
+public class Crawler {
 	private static String urlString = "http://calendar.byui.edu/RSSFeeds.aspx?data=tq9cbc8b%2btuQeZGvCTEMSP%2bfv3SYIrjQ3VTAXA335bE0WtJCqYU4mp9MMtuSlz6MRZ4LbMUU%2fO4%3d";
 	public Application app;
 
@@ -32,35 +32,43 @@ public class Crawler implements Runnable {
 
 	public void run() {
 		try {
-			app.setEventItems(crawl());
+			crawl();
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
 		}
 	}
 
-	public String getFeed() throws IOException {
-		StringBuilder result = new StringBuilder();
-		URL url = new URL(Crawler.urlString);
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-		String line;
-		while ((line = rd.readLine()) != null) {
-			result.append(line);
-		}
-		rd.close();
-		return result.toString().replaceAll("[^\\x20-\\x7e]", "");
+	public void crawl() throws IOException {
+		Ion.with(this.app.getContext())
+				.load(Crawler.urlString)
+				.asString()
+				.withResponse()
+				.setCallback(new FutureCallback<Response<String>>() {
+					@Override
+					public void onCompleted(Exception e, Response<String> result) {
+						// print the response code, ie, 200
+						System.out.println(result.getHeaders().code());
+						// print the String that was downloaded
+						if (result.getHeaders().code() == 200) {
+							try {
+								Crawler.this.app.setEventItems(Crawler.this.parse(result.getResult().toString().replaceAll("[^\\x20-\\x7e]", "")));
+							} catch (IOException e1) {
+								e1.printStackTrace();
+							} catch (SAXException e1) {
+								e1.printStackTrace();
+							} catch (ParserConfigurationException e1) {
+								e1.printStackTrace();
+							}
+						}
+					}
+				});
 	}
 
-	public List<EventItem> crawl() throws IOException, SAXException, ParserConfigurationException {
+	public List<EventItem> parse(String input) throws IOException, SAXException, ParserConfigurationException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		InputSource is = new InputSource(new StringReader(getFeed()));
+		InputSource is = new InputSource(new StringReader(input));
 		Document doc = builder.parse(is);
 
 		doc.getDocumentElement().normalize();
