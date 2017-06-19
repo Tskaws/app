@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -132,6 +133,19 @@ public class MainActivity extends AppCompatActivity implements Observer {
             Format formatter = new SimpleDateFormat("MMMM dd, yyyy");
             String theDate = formatter.format(item.getDate());
             myDate.setText(theDate);
+
+            final CheckBox checkbox = (CheckBox) row.findViewById(R.id.checkbox);
+            checkbox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(checkbox.isChecked()){
+                        System.out.println("Checked");
+                    }else{
+                        System.out.println("Un-Checked");
+                    }
+                }
+            });
+
 
             if (item.getImageUrl() != null) {
                 new DownloadImage((ImageView) row.findViewById(R.id.logo)).execute(item.getImageUrl());

@@ -1,48 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:elevation="17dp"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <ImageView
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:padding="5dp"
         android:id="@+id/logo"
-        android:src="@drawable/background"/>
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_weight="656.96"
+        android:elevation="0dp"
+        android:padding="5dp"
+        android:src="@drawable/background" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="656.96"
+        android:padding="5dp"
+        android:text="Medium Text"
+        android:textColor="#0066ff" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="2dp"
-            android:textColor="#0066ff"
-            android:id="@+id/text1"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="10dp"
-            android:text="Medium Text"/>
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:layout_marginLeft="12dp"
+        android:layout_weight="656.96"
+        android:padding="5dp"
+        android:text="Date"
+        android:textColor="#FF020202" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/date"
-            android:layout_marginLeft="12dp"
-            android:layout_marginBottom="2dp"
-            android:text="Date"
-            android:textColor="#FF020202" />
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_weight="656.96"
+        android:padding="5dp"
+        android:text="TextView"
+        android:textColor="#FF020202" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/text2"
-            android:layout_marginLeft="12dp"
-            android:text="TextView"
-            android:textColor="#FF020202"/>
-
-    </LinearLayout>
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="656.96"
+        android:button="@android:drawable/btn_star"
+        android:text="CheckBox" />
 
 </LinearLayout>
