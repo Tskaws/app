@@ -1,6 +1,7 @@
 package tskaws.app;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
+    public static final String EXTRA_MESSAGE = "tskaws.app.MESSAGE";
     public static final String TAG = "Main_Activity";
     ListView list;
     MainActivity.MyAdapter adapter = null;
@@ -144,6 +146,17 @@ public class MainActivity extends AppCompatActivity implements Observer {
                     }
                 }
             });
+
+            final Intent intent = new Intent(this.context, EventActivity.class);
+            intent.putExtra(EXTRA_MESSAGE, item);
+
+            row.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(intent);
+                }
+            });
+
 
 
             if (item.getImageUrl() != null) {

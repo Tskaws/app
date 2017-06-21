@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.provider.CalendarContract;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -13,7 +14,7 @@ import java.util.Date;
  * Created by jj_re on 5/31/2017.
  */
 
-public class EventItem {
+public class EventItem implements Serializable {
 
     // Class member variables
     private String guid;
