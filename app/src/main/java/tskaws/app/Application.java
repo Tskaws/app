@@ -47,10 +47,10 @@ public class Application extends Observable {
 		notifyObservers();
 	}
 
-	public String sendAppToJson() {
+	public static String sendAppToJson(Application thisApp) {
 		// Serialize to JSON
 		Gson gson = new Gson();
-		String AppJsonString = gson.toJson(this);
+		String AppJsonString = gson.toJson(thisApp);
 		return AppJsonString;
 	}
 

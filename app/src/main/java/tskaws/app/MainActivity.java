@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,14 +18,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.io.InputStream;
-import java.net.URL;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Formatter;
 import java.util.Observable;
 import java.util.Observer;
-import com.google.gson.Gson;
+
+import static tskaws.app.Application.sendAppToJson;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
@@ -40,6 +40,17 @@ public class MainActivity extends AppCompatActivity implements Observer {
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
         this.app = Application.restore(getApplicationContext());
+
+
+        // Changes made by TJ
+        // trying to get this.app to not equal null
+/*        Crawler crawler = new Crawler(this.app);
+        try {
+            crawler.crawl();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
         app.addObserver((Observer) this);
 
         // Populate the list
@@ -78,7 +89,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         Gson gson = new Gson();
         String json = myPrefs.getString("Application", "");
-        app = gson.fromJson(json, Application.class);
+        if (json != null && !json.isEmpty())
+            app = gson.fromJson(json, Application.class);
     }
     @Override
     public void onStop(){
@@ -87,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         // Save the EventList as a JSON string
         SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
-        myPrefsEditor.putString("Application", app.sendAppToJson());
-        myPrefsEditor.commit();
+        myPrefsEditor.putString("Application", sendAppToJson(this.app)); // this code is breaking
+        myPrefsEditor.apply();
     }
 
     public void update(Observable o, Object arg) {
