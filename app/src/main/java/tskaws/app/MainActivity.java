@@ -19,17 +19,19 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import static tskaws.app.Application.sendAppToJson;
-
 public class MainActivity extends AppCompatActivity implements Observer {
 
+    public static final String TAG = "Main_Activity";
     ListView list;
     MainActivity.MyAdapter adapter = null;
     Application app = null;
@@ -83,14 +85,18 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     public void onResume(){
         super.onResume();
-
         // Load the existing Application from SharedPreferences
         SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = myPrefs.getString("Application", "");
-        if (json != null && !json.isEmpty())
-            app = gson.fromJson(json, Application.class);
+        if (json != null && !json.isEmpty()) {
+            // arrays have to be desearealized seperately
+            ArrayList<EventItem> newEvents = new ArrayList<>();
+            newEvents = gson.fromJson(json, new TypeToken<List<EventItem>>() {
+            }.getType());
+            app.setEventItems(newEvents);
+        }
     }
     @Override
     public void onStop(){
@@ -99,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         // Save the EventList as a JSON string
         SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
-        myPrefsEditor.putString("Application", sendAppToJson(this.app)); // this code is breaking
+        myPrefsEditor.putString("Application", this.app.sendAppToJson()); // this code is breaking
         myPrefsEditor.apply();
     }
 
