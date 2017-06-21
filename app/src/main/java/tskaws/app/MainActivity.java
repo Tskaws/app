@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
         getSupportActionBar().setElevation(0);
         this.app = Application.restore(getApplicationContext());
@@ -49,27 +50,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         list.setAdapter(this.adapter);
     }
 
-    /** SearchBar
-     * This is the customization work-in-progress of the search feature
-     * being in the app bar.
-     * @param menu
-     * @return
-     **/
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
 
-
-        /*
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-        // Search view options
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setIconifiedByDefault(false);
-        */
-        return true;
-    }
     @Override
     public void onResume(){
         super.onResume();
