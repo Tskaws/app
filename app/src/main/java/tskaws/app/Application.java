@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Observable;
 
 public class Application extends Observable {
+
+	// For logging purposes
+	private static final String TAG = "Application";
+
 	private final Context context;
 	private List<EventItem> eventList;
 
@@ -50,8 +54,8 @@ public class Application extends Observable {
 	public String sendAppToJson() {
 		// Serialize to JSON
 		Gson gson = new Gson();
-		String AppJsonString = gson.toJson(this);
-		return AppJsonString;
+		String AppEventsJsonString = gson.toJson(this.getEventItems());//.getEventItems());
+		return AppEventsJsonString;
 	}
 
 	public Context getContext() {
