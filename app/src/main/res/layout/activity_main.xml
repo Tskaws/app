@@ -34,7 +34,6 @@
             app:mt_hint="@string/search_hint"
             app:mt_maxSuggestionsCount="10"
             app:mt_speechMode="false"
-            
             />
 
         <android.support.design.widget.TabLayout

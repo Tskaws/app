@@ -28,6 +28,7 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -125,13 +126,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
             View row = layoutInflater.inflate(R.layout.row, parent, false);
 
             TextView myTitle = (TextView) row.findViewById(R.id.text1);
-            TextView myDescription = (TextView) row.findViewById(R.id.text2);
+            //TextView myDescription = (TextView) row.findViewById(R.id.text2);
             TextView myDate = (TextView) row.findViewById(R.id.date);
             ImageView myLogo = (ImageView) row.findViewById(R.id.logo);
             myTitle.setText(item.getTitle());
-            myDescription.setText(item.getDescription());
+            //myDescription.setText(item.getDescription());
 
-            Format formatter = new SimpleDateFormat("MMMM dd, yyyy");
+            Format formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
             String theDate = formatter.format(item.getDate());
             myDate.setText(theDate);
 
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 public void onClick(View v) {
                     if(checkbox.isChecked()){
                         System.out.println("Checked");
+
                     }else{
                         System.out.println("Un-Checked");
                     }
