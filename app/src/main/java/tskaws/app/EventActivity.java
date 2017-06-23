@@ -54,31 +54,4 @@ public class EventActivity extends AppCompatActivity {
         Log.d(TAG, "Got to the end Activity");
 
     }
-
-    class DownloadImage extends AsyncTask<String, Void, Bitmap> {
-        ImageView image;
-
-        public DownloadImage(ImageView image) {
-            this.image = image;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            image.setImageBitmap(result);
-        }
-    }
-
 }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,8 +28,10 @@ import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -48,16 +51,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         getSupportActionBar().setElevation(0);
         this.app = Application.restore(getApplicationContext());
 
-
-        // Changes made by TJ
-        // trying to get this.app to not equal null
-/*        Crawler crawler = new Crawler(this.app);
-        try {
-            crawler.crawl();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
         app.addObserver((Observer) this);
 
         // Populate the list
@@ -70,13 +63,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     public void onResume(){
         super.onResume();
-        // Load the existing Application from SharedPreferences
         SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = myPrefs.getString("Application", "");
         if (json != null && !json.isEmpty()) {
-            // arrays have to be desearealized seperately
             ArrayList<EventItem> newEvents = new ArrayList<>();
             newEvents = gson.fromJson(json, new TypeToken<List<EventItem>>() {
             }.getType());
@@ -98,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     public void update(Observable o, Object arg) {
-        //this.adapter.notifyDataSetChanged();
-        //this.adapter.clear();
         this.adapter.reload();
     }
 
@@ -129,11 +118,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
             View row = layoutInflater.inflate(R.layout.row, parent, false);
 
             TextView myTitle = (TextView) row.findViewById(R.id.text1);
-            //TextView myDescription = (TextView) row.findViewById(R.id.text2);
             TextView myDate = (TextView) row.findViewById(R.id.date);
             ImageView myLogo = (ImageView) row.findViewById(R.id.logo);
             myTitle.setText(item.getTitle());
-            //myDescription.setText(item.getDescription());
 
             Format formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
             String theDate = formatter.format(item.getDate());
@@ -160,37 +147,12 @@ public class MainActivity extends AppCompatActivity implements Observer {
             });
 
 
+            ImageView image = (ImageView) row.findViewById(R.id.logo);
             if (item.getImageUrl() != null) {
-                new DownloadImage((ImageView) row.findViewById(R.id.logo)).execute(item.getImageUrl());
+                new DownloadImage(image).execute(item.getImageUrl());
             }
 
             return row;
-        }
-    }
-
-    class DownloadImage extends AsyncTask<String, Void, Bitmap> {
-        ImageView image;
-
-        public DownloadImage(ImageView image){
-            this.image = image;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e){
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            image.setImageBitmap(result);
         }
     }
 }
