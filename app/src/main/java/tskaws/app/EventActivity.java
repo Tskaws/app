@@ -7,6 +7,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,7 +32,7 @@ public class EventActivity extends AppCompatActivity {
 
         // Get the Intent that started this activity and extract the event
         Intent intent = getIntent();
-        EventItem event = (EventItem) intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
+        final EventItem event = (EventItem) intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
 
         Log.d(TAG, "Received Intent and made an event " + event.getTitle());
 
@@ -53,5 +55,11 @@ public class EventActivity extends AppCompatActivity {
 
         Log.d(TAG, "Got to the end Activity");
 
+        Button button = (Button) findViewById(R.id.calendarButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(event.addToCalendar());
+            }
+        });
     }
 }
