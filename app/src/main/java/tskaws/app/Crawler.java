@@ -75,6 +75,8 @@ public class Crawler {
 
 		NodeList nList = doc.getElementsByTagName("item");
 
+		List<EventItem> existingList = this.app.getEventItems();
+
 		List<EventItem> result = new ArrayList<>();
 		SimpleDateFormat parser = new SimpleDateFormat("EEE, d MMM yyyy HH:mm:ss zzz");
 
@@ -107,6 +109,13 @@ public class Crawler {
 					eElement.getElementsByTagName("link").item(0).getTextContent().trim(),
 					imageUrl
 				);
+
+				for(EventItem item : existingList) {
+					if (item.getGuid().equals(event.getGuid()) && item.isStarred()) {
+						event.setStarred(true);
+						break;
+					}
+				}
 
 				result.add(event);
 			}

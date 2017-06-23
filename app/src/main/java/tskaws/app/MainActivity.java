@@ -86,8 +86,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     public void onStop(){
         super.onStop();
+        save();
+    }
 
-        // Save the EventList as a JSON string
+    public void save(){
+        // @TODO do firebase stuff here
         SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
         myPrefsEditor.putString("Application", this.app.sendAppToJson()); // this code is breaking
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            EventItem item = this.app.getEventItems().get(position);
+            final EventItem item = this.app.getEventItems().get(position);
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.row, parent, false);
 
@@ -137,15 +140,12 @@ public class MainActivity extends AppCompatActivity implements Observer {
             myDate.setText(theDate);
 
             final CheckBox checkbox = (CheckBox) row.findViewById(R.id.checkbox);
+            checkbox.setChecked(item.isStarred());
             checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(checkbox.isChecked()){
-                        System.out.println("Checked");
-
-                    }else{
-                        System.out.println("Un-Checked");
-                    }
+                    item.setStarred(checkbox.isChecked());
+                    MainActivity.this.save();
                 }
             });
 
@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
                     startActivity(intent);
                 }
             });
-
 
 
             if (item.getImageUrl() != null) {
