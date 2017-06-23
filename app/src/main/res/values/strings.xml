@@ -1,10 +1,11 @@
 <resources>
-    <string name="app_name">app</string>
+    <string name="app_name">Student Activities</string>
     <string name="tab_feed">feed</string>
     <string name="tab_trending">trending</string>
     <string name="tab_favorites">favorites</string>
     <string name="search_hint">Explore Activities</string>
     <string name="activity_name">Activity Name</string>
     <string name="activity_date">Date</string>
+    <string name="activity_information">Information</string>
     <string name="activity_checkbox">Favorite</string>
 </resources>
