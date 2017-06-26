@@ -45,6 +45,8 @@ public class EventActivity extends AppCompatActivity {
         TextView titleView = (TextView) findViewById(R.id.title);
         titleView.setText(event.getTitle());
 
+        setTitle(event.getTitle());
+
         Format formatter = new SimpleDateFormat("MMMM dd, yyyy");
         String theDate = formatter.format(event.getDate());
         TextView dateView = (TextView) findViewById(R.id.date);
