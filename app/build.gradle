@@ -31,5 +31,9 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.koushikdutta.ion:ion:2.+'
     compile 'com.github.mancj:MaterialSearchBar:0.7'
-    compile 'com.couchbase.lite:couchbase-lite-android:1.4.0'
+    /**
+     * @TODO
+     * Figure out build failure
+     */
+    //compile 'com.couchbase.lite:couchbase-lite-android:1.4.0'
 }
