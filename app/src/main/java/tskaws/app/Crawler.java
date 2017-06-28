@@ -34,31 +34,27 @@ public class Crawler {
 	 * Primary entry function for the crawler.
 	 */
 	public void run() {
-		try {
-			Ion.with(this.app.getContext())
-					.load(Crawler.urlString)
-					.asString()
-					.withResponse()
-					.setCallback(new FutureCallback<Response<String>>() {
-						@Override
-						public void onCompleted(Exception e, Response<String> result) {
-							if (result.getHeaders().code() == 200) {
-								try {
-									List<EventItem> eventItems = Crawler.this.parse(result.getResult().toString().replaceAll("[^\\x20-\\x7e]", ""))
-									Crawler.this.app.setEventItems(eventItems);
-								} catch (IOException e1) {
-									e1.printStackTrace();
-								} catch (SAXException e1) {
-									e1.printStackTrace();
-								} catch (ParserConfigurationException e1) {
-									e1.printStackTrace();
-								}
-							}
-						}
-					});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		Ion.with(this.app.getContext())
+                .load(Crawler.urlString)
+                .asString()
+                .withResponse()
+                .setCallback(new FutureCallback<Response<String>>() {
+                    @Override
+                    public void onCompleted(Exception e, Response<String> result) {
+                        if (result.getHeaders().code() == 200) {
+                            try {
+                                List<EventItem> eventItems = Crawler.this.parse(result.getResult().toString().replaceAll("[^\\x20-\\x7e]", ""));
+                                Crawler.this.app.setEventItems(eventItems);
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            } catch (SAXException e1) {
+                                e1.printStackTrace();
+                            } catch (ParserConfigurationException e1) {
+                                e1.printStackTrace();
+                            }
+                        }
+                    }
+                });
 	}
 
 	/**

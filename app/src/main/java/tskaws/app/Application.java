@@ -67,11 +67,8 @@ public class Application extends Observable {
 		//app.setEventItems(/*Restore from json*/);
 
 		Crawler crawler = new Crawler(app);
-		try {
-			crawler.crawl();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		crawler.run();
+
 		return app;
 	}
 }
