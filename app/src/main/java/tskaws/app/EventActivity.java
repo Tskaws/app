@@ -2,10 +2,7 @@ package tskaws.app;
 
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,11 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,9 +33,9 @@ public class EventActivity extends AppCompatActivity {
 
         Log.d(TAG, "Received Intent and made an event " + event.getTitle());
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
 
         if (event.getImageUrl() != null) {
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
             new DownloadImage(imageView).execute(event.getImageUrl());
         }
 

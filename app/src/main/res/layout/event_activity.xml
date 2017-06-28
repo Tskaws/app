@@ -56,7 +56,8 @@
             android:layout_height="200dp"
             android:layout_weight="0.57"
             android:scaleType="fitCenter"
-            app:srcCompat="@mipmap/ic_launcher" />
+            android:src="@drawable/background" />
+        />
 
         <TextView
             android:id="@+id/title"
