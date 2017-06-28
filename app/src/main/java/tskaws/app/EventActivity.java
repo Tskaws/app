@@ -1,8 +1,10 @@
 package tskaws.app;
 
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Jason on 6/5/17.
@@ -63,5 +66,39 @@ public class EventActivity extends AppCompatActivity {
                 startActivity(event.addToCalendar());
             }
         });
+
+        Button share = (Button) findViewById(R.id.facebook);
+        share.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                shareEvent(event);
+            }
+        });
+
+    }
+
+    public void shareEvent (EventItem event) {
+        String urlToShare = event.getLink();
+        Intent fIntent = new Intent(Intent.ACTION_SEND);
+        fIntent.setType("text/plain");
+        fIntent.putExtra(Intent.EXTRA_TEXT, urlToShare);
+
+        // See if official Facebook app is found
+        boolean facebookAppFound = false;
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(fIntent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+                fIntent.setPackage(info.activityInfo.packageName);
+                facebookAppFound = true;
+                break;
+            }
+        }
+
+        // As fallback, launch sharer.php in a browser
+        if (!facebookAppFound) {
+            String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + urlToShare;
+            fIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+        }
+
+        startActivity(fIntent);
     }
 }
