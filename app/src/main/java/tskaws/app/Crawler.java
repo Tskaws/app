@@ -30,40 +30,45 @@ public class Crawler {
 		this.app = app;
 	}
 
+	/**
+	 * Primary entry function for the crawler.
+	 */
 	public void run() {
 		try {
-			crawl();
+			Ion.with(this.app.getContext())
+					.load(Crawler.urlString)
+					.asString()
+					.withResponse()
+					.setCallback(new FutureCallback<Response<String>>() {
+						@Override
+						public void onCompleted(Exception e, Response<String> result) {
+							if (result.getHeaders().code() == 200) {
+								try {
+									List<EventItem> eventItems = Crawler.this.parse(result.getResult().toString().replaceAll("[^\\x20-\\x7e]", ""))
+									Crawler.this.app.setEventItems(eventItems);
+								} catch (IOException e1) {
+									e1.printStackTrace();
+								} catch (SAXException e1) {
+									e1.printStackTrace();
+								} catch (ParserConfigurationException e1) {
+									e1.printStackTrace();
+								}
+							}
+						}
+					});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void crawl() throws IOException {
-		Ion.with(this.app.getContext())
-				.load(Crawler.urlString)
-				.asString()
-				.withResponse()
-				.setCallback(new FutureCallback<Response<String>>() {
-					@Override
-					public void onCompleted(Exception e, Response<String> result) {
-						// print the response code, ie, 200
-						System.out.println(result.getHeaders().code());
-						// print the String that was downloaded
-						if (result.getHeaders().code() == 200) {
-							try {
-								Crawler.this.app.setEventItems(Crawler.this.parse(result.getResult().toString().replaceAll("[^\\x20-\\x7e]", "")));
-							} catch (IOException e1) {
-								e1.printStackTrace();
-							} catch (SAXException e1) {
-								e1.printStackTrace();
-							} catch (ParserConfigurationException e1) {
-								e1.printStackTrace();
-							}
-						}
-					}
-				});
-	}
-
+	/**
+	 * Given an rss feed as a string, converts it to a list of EventItem.
+	 * @param input rss feed as xml
+	 * @return list of EventItem
+	 * @throws IOException
+	 * @throws SAXException
+	 * @throws ParserConfigurationException
+	 */
 	public List<EventItem> parse(String input) throws IOException, SAXException, ParserConfigurationException {
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
