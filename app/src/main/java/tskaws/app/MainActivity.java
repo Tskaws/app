@@ -3,16 +3,10 @@ package tskaws.app;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -23,15 +17,14 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.mancj.materialsearchbar.MaterialSearchBar;
+import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
-import java.io.InputStream;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -39,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     public static final String EXTRA_MESSAGE = "tskaws.app.MESSAGE";
     public static final String TAG = "Main_Activity";
+    private MaterialSearchBar searchBar;
+    List<EventItem> suggestions = new ArrayList<>();
+
     ListView list;
     MainActivity.MyAdapter adapter = null;
     Application app = null;
@@ -57,6 +53,18 @@ public class MainActivity extends AppCompatActivity implements Observer {
         list = (ListView) findViewById(R.id.events);
         this.adapter = new MainActivity.MyAdapter(this, app);
         list.setAdapter(this.adapter);
+
+        // Create suggestions for the search bar
+        searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
+        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
+        CustomSuggestionsAdapter customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
+        suggestions = this.app.getEventItems();
+        customSuggestionsAdapter.setSuggestions(suggestions);
+        searchBar.setCustomSuggestionAdapter(customSuggestionsAdapter);
+
+        searchBar.inflateMenu(R.menu.main);
+
+
     }
 
 
@@ -154,6 +162,40 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
             return row;
         }
+    }
+
+    static class SuggestionHolder extends RecyclerView.ViewHolder{
+        protected TextView title;
+
+        public SuggestionHolder(View itemView) {
+            super(itemView);
+            title = (TextView) itemView.findViewById(R.id.Title);
+        }
+    }
+
+    public class CustomSuggestionsAdapter extends SuggestionsAdapter<EventItem, SuggestionHolder> {
+
+
+        public CustomSuggestionsAdapter(LayoutInflater inflater) {
+            super(inflater);
+        }
+
+        @Override
+        public void onBindSuggestionHolder(EventItem suggestion, SuggestionHolder holder, int position) {
+            holder.title.setText(suggestion.getCategory());
+        }
+
+        @Override
+        public SuggestionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.suggestion, parent, false);
+            return new SuggestionHolder(view);
+        }
+
+        @Override
+        public int getSingleViewHeight() {
+            return 10;
+        }
+
     }
 }
 
