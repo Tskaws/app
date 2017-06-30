@@ -65,6 +65,7 @@
                 android:onClick="favorites"
                 android:text="@string/tab_favorites" />
         </android.support.design.widget.TabLayout>
+
     </android.support.design.widget.AppBarLayout>
 
 
