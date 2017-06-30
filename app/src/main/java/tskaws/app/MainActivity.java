@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -29,7 +28,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
@@ -42,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     ListView list;
     MainActivity.MyAdapter adapter = null;
     Application app = null;
+    int currentTab = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,20 +115,27 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     public void update(Observable o, Object arg) {
+        rerender();
+    }
+
+    public void rerender(){
         this.adapter.reload();
         getCategories();
     }
 
     public void feed(View view) {
-        Toast.makeText(this, "You have selected the main feed.", Toast.LENGTH_SHORT).show();
+        currentTab = 0;
+        rerender();
     }
 
     public void trending(View view) {
-        Toast.makeText(this, "You have selected the trending activities.", Toast.LENGTH_SHORT).show();
+        currentTab = 1;
+        rerender();
     }
 
     public void favorites(View view) {
-        Toast.makeText(this, "You have selected favorites.", Toast.LENGTH_SHORT).show();
+        currentTab = 2;
+        rerender();
     }
 
     /** Using the row.xml layout create an adapter for the strings to
@@ -148,8 +154,13 @@ public class MainActivity extends AppCompatActivity implements Observer {
         public List<EventItem> filter(List<EventItem> list) {
             List<EventItem> returned = new ArrayList<>();
             for(EventItem item : list) {
-                //@TODO add filtering options
-                returned.add(item);
+                if ((MainActivity.this.currentTab == 0) // first tab shows everything
+                || (MainActivity.this.currentTab == 1) // @TODO show only trending
+                || (MainActivity.this.currentTab == 2 && item.isStarred()) // show only items starred
+                /*@todo add case for searching and categories here*/
+                ) {
+                    returned.add(item);
+                }
             }
             return returned;
         }
