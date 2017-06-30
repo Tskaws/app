@@ -10,10 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -98,6 +100,18 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     public void update(Observable o, Object arg) {
         this.adapter.reload();
+    }
+
+    public void feed(View view) {
+        Toast.makeText(this, "You have selected the main feed.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void trending(View view) {
+        Toast.makeText(this, "You have selected the trending activities.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void favorites(View view) {
+        Toast.makeText(this, "You have selected favorites.", Toast.LENGTH_SHORT).show();
     }
 
     /** Using the row.xml layout create an adapter for the strings to

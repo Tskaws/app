@@ -33,8 +33,7 @@
             android:layout_height="match_parent"
             app:mt_hint="@string/search_hint"
             app:mt_maxSuggestionsCount="10"
-            app:mt_speechMode="false"
-            />
+            app:mt_speechMode="false" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
@@ -49,20 +48,24 @@
                 android:id="@+id/feed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="feed"
                 android:text="@string/tab_feed" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/trending"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="trending"
                 android:text="@string/tab_trending" />
 
             <android.support.design.widget.TabItem
                 android:id="@+id/favorites"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="favorites"
                 android:text="@string/tab_favorites" />
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
+
 
 </android.support.design.widget.CoordinatorLayout>
