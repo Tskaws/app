@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         Gson gson = new Gson();
         String json = myPrefs.getString("Application", "");
         if (json != null && !json.isEmpty()) {
-            ArrayList<EventItem> newEvents = new ArrayList<>();
+            List<EventItem> newEvents = new ArrayList<>();
             newEvents = gson.fromJson(json, new TypeToken<List<EventItem>>() {
             }.getType());
             app.setEventItems(newEvents);
@@ -113,9 +113,18 @@ public class MainActivity extends AppCompatActivity implements Observer {
             this.app = app;
         }
 
+        public List<EventItem> filter(List<EventItem> list) {
+            List<EventItem> returned = new ArrayList<>();
+            for(EventItem item : list) {
+                //@TODO add filtering options
+                returned.add(item);
+            }
+            return returned;
+        }
+
         public void reload() {
             this.clear();
-            this.addAll(app.getEventItems());
+            this.addAll(filter(app.getEventItems()));
             notifyDataSetChanged();
         }
 

@@ -54,7 +54,7 @@ public class Application extends Observable {
 	public String sendAppToJson() {
 		// Serialize to JSON
 		Gson gson = new Gson();
-		String AppEventsJsonString = gson.toJson(this.getEventItems());//.getEventItems());
+		String AppEventsJsonString = gson.toJson(this.getEventItems());
 		return AppEventsJsonString;
 	}
 
@@ -64,7 +64,6 @@ public class Application extends Observable {
 
 	public static Application restore(Context context) {
 		Application app = new Application(context);
-		//app.setEventItems(/*Restore from json*/);
 
 		Crawler crawler = new Crawler(app);
 		crawler.run();
