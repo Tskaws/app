@@ -27,13 +27,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.stream.Collectors;
 
 public class MainActivity extends AppCompatActivity implements Observer {
 
     public static final String EXTRA_MESSAGE = "tskaws.app.MESSAGE";
     public static final String TAG = "Main_Activity";
     private MaterialSearchBar searchBar;
-    List<EventItem> suggestions = new ArrayList<>();
+    List<String> suggestions = new ArrayList<>();
+    CustomSuggestionsAdapter customSuggestionsAdapter;
 
     ListView list;
     MainActivity.MyAdapter adapter = null;
@@ -57,14 +59,29 @@ public class MainActivity extends AppCompatActivity implements Observer {
         // Create suggestions for the search bar
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        CustomSuggestionsAdapter customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
-        suggestions = this.app.getEventItems();
-        customSuggestionsAdapter.setSuggestions(suggestions);
+        customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
         searchBar.setCustomSuggestionAdapter(customSuggestionsAdapter);
+        getCategories();
+    }
 
-        searchBar.inflateMenu(R.menu.main);
+    public void getCategories() {
+        List<EventItem>  eventList = app.getEventItems();
+        customSuggestionsAdapter.clearSuggestions();
+        List<String> added = new ArrayList<>();
 
-
+        for(EventItem item : eventList) {
+            boolean found = false;
+            for(String existing : added) {
+                if (existing.equals(item.getCategory())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                added.add(item.getCategory());
+                customSuggestionsAdapter.addSuggestion(item.getCategory());
+            }
+        }
     }
 
 
@@ -98,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     public void update(Observable o, Object arg) {
         this.adapter.reload();
+        getCategories();
     }
 
     /** Using the row.xml layout create an adapter for the strings to
@@ -182,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    public class CustomSuggestionsAdapter extends SuggestionsAdapter<EventItem, SuggestionHolder> {
+    public class CustomSuggestionsAdapter extends SuggestionsAdapter<String, SuggestionHolder> {
 
 
         public CustomSuggestionsAdapter(LayoutInflater inflater) {
@@ -190,8 +208,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         }
 
         @Override
-        public void onBindSuggestionHolder(EventItem suggestion, SuggestionHolder holder, int position) {
-            holder.title.setText(suggestion.getCategory());
+        public void onBindSuggestionHolder(String suggestion, SuggestionHolder holder, int position) {
+            holder.title.setText(suggestion);
         }
 
         @Override
@@ -202,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         @Override
         public int getSingleViewHeight() {
-            return 10;
+            return 20;
         }
 
     }
