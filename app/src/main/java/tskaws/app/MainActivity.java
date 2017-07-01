@@ -245,7 +245,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         @Override
         public int getSingleViewHeight() {
-            return 20;
+            return 19;
         }
 
     }
