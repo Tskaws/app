@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -63,6 +64,35 @@ public class MainActivity extends AppCompatActivity implements Observer {
         customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
         searchBar.setCustomSuggestionAdapter(customSuggestionsAdapter);
         getCategories();
+
+        ((TabLayout)this.findViewById(R.id.tabs)).addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        feed();
+                        break;
+                    case 1:
+                        trending();
+                        break;
+                    case 2:
+                        favorites();
+                        break;
+                    default:
+                        feed();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
     }
 
     public void getCategories() {
@@ -123,17 +153,17 @@ public class MainActivity extends AppCompatActivity implements Observer {
         getCategories();
     }
 
-    public void feed(View view) {
+    public void feed() {
         currentTab = 0;
         rerender();
     }
 
-    public void trending(View view) {
+    public void trending() {
         currentTab = 1;
         rerender();
     }
 
-    public void favorites(View view) {
+    public void favorites() {
         currentTab = 2;
         rerender();
     }
