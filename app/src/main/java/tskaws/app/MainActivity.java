@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +16,12 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
@@ -137,7 +140,28 @@ public class MainActivity extends AppCompatActivity implements Observer {
     }
 
     public void save(){
-        // @TODO do firebase stuff here
+
+        JsonObject jsonObject = new JsonObject();
+
+        // @TODO add logic to add stars to database when an event gets starred
+/*        for (int i = 0; i < app.getEventItems().size(); i++) {
+            String guid = app.getEventItems().get(i).getGuid();
+            int numStars = app.getEventItems().get(i).getTotalStars();
+            jsonObject.addProperty("guid", guid);
+            jsonObject.addProperty("numStars", numStars);
+            Ion.with(this.getApplicationContext())
+                    .load("https://tmcd.cloudant.com/student_activities/")
+                    .setJsonObjectBody(jsonObject)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            if (e != null)
+                                Log.e("Error in", "posting to database");
+                        }
+                    });
+        }
+*/
         SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
         myPrefsEditor.putString("Application", this.app.sendAppToJson()); // this code is breaking
@@ -222,6 +246,24 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 @Override
                 public void onClick(View v) {
                     item.setStarred(checkbox.isChecked());
+                    if(item.isStarred()) {
+                        // Post to the data base!!!
+                        JsonObject jsonObject = new JsonObject();
+                        String guid = item.getGuid();
+                        jsonObject.addProperty("guid", guid);
+                        jsonObject.addProperty("title", item.getTitle());
+                        Ion.with(v.getContext())
+                                .load("https://tmcd.cloudant.com/student_activities/")
+                                .setJsonObjectBody(jsonObject)
+                                .asJsonObject()
+                                .setCallback(new FutureCallback<JsonObject>() {
+                                    @Override
+                                    public void onCompleted(Exception e, JsonObject result) {
+                                        if (e != null)
+                                            Log.e("Error in", "posting to database");
+                                    }
+                                });
+                    }
                     MainActivity.this.save();
                 }
             });

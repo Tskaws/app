@@ -1,9 +1,6 @@
 package tskaws.app;
 
-import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Intent;
-import android.net.Uri;
 import android.provider.CalendarContract;
 
 import java.io.Serializable;
@@ -25,6 +22,7 @@ public class EventItem implements Serializable {
     private String link;
     private String imageUrl;
     private boolean isStarred;
+    private int totalStars;
 
     /*
     private Object pictures1;
@@ -40,6 +38,7 @@ public class EventItem implements Serializable {
         this.link = "";
         this.imageUrl = "";
         this.isStarred = false;
+        this.totalStars = 0;
     }
 
     public EventItem(String guid, String title, Date date, String description, String category, String link, String imageUrl) {
@@ -112,6 +111,9 @@ public class EventItem implements Serializable {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public int getTotalStars()              { return this.totalStars;     }
+    public void setTotalStars(int numStars) { this.totalStars = numStars; }
 
     public Intent addToCalendar() {
         Calendar beginTime = Calendar.getInstance();
