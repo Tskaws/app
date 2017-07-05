@@ -36,6 +36,7 @@ import java.util.Observer;
 public class MainActivity extends AppCompatActivity implements Observer {
 
     public static final String EXTRA_MESSAGE = "tskaws.app.MESSAGE";
+    public static final String EXTRA_TEXT = "tskaws.app.TEXT";
     public static final String TAG = "Main_Activity";
     private MaterialSearchBar searchBar;
     List<String> suggestions = new ArrayList<>();
@@ -269,7 +270,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
             });
 
             final Intent intent = new Intent(this.context, EventActivity.class);
-            intent.putExtra(EXTRA_MESSAGE, item);
+            intent.putExtra(EXTRA_MESSAGE, item.getGuid());
+            //intent.putExtra(EXTRA_TEXT, this.app);
 
             row.setOnClickListener(new View.OnClickListener() {
                 @Override

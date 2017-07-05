@@ -1,6 +1,7 @@
 package tskaws.app;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.text.Format;
@@ -21,15 +23,26 @@ import java.util.List;
 public class EventActivity extends AppCompatActivity {
 
     private static final String TAG = "EventActivity";
+    Application app = null;
 
+    @Override
+    public void onStop(){
+        super.onStop();
+        save();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.event_activity);
         Log.d(TAG, "About to start Activity");
+        app = Application.getInstance();
 
         // Get the Intent that started this activity and extract the event
         Intent intent = getIntent();
-        final EventItem event = (EventItem) intent.getSerializableExtra(MainActivity.EXTRA_MESSAGE);
+        String eventId = (String) intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+        final EventItem event = app.findEventById(eventId);
+        //app = (Application) intent.getSerializableExtra(MainActivity.EXTRA_TEXT);
 
         Log.d(TAG, "Received Intent and made an event " + event.getTitle());
 
@@ -68,6 +81,16 @@ public class EventActivity extends AppCompatActivity {
             }
         });
 
+        final CheckBox checkbox = (CheckBox) findViewById(R.id.checkBox);
+        checkbox.setChecked(event.isStarred());
+        checkbox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                event.setStarred(checkbox.isChecked());
+                EventActivity.this.save();
+            }
+        });
+
     }
 
     public void shareEvent (EventItem event) {
@@ -94,5 +117,13 @@ public class EventActivity extends AppCompatActivity {
         }
 
         startActivity(fIntent);
+    }
+
+    public void save(){
+        // @TODO do firebase stuff here
+        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
+        myPrefsEditor.putString("Application", app.sendAppToJson());
+        myPrefsEditor.apply();
     }
 }

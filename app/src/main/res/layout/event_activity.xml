@@ -33,6 +33,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Add to Calendar" />
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@android:drawable/btn_star"
+            android:textColor="@android:color/black"
+            android:text="Favorite" />
     </LinearLayout>
 
     <LinearLayout

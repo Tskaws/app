@@ -1,10 +1,13 @@
 package tskaws.app;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.google.gson.Gson;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -13,6 +16,10 @@ public class Application extends Observable {
 
 	// For logging purposes
 	private static final String TAG = "Application";
+	static Application instance = null;
+	public static Application getInstance() {
+		return instance;
+	}
 
 	private final Context context;
 	private List<EventItem> eventList;
@@ -64,10 +71,20 @@ public class Application extends Observable {
 
 	public static Application restore(Context context) {
 		Application app = new Application(context);
+		//app.setEventItems(/*Restore from json*/);
+		instance = app;
 
-		Crawler crawler = new Crawler(app);
+		Crawler crawler = new Crawler(instance);
 		crawler.run();
 
-		return app;
+		return instance;
+	}
+	public EventItem findEventById(String id) {
+		for (EventItem item : getEventItems()) {
+			if (item.getGuid().equals(id)) {
+				return item;
+			}
+		}
+		return null;
 	}
 }
