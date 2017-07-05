@@ -28,14 +28,6 @@
         app:elevation="4dp">
 
 
-        <com.mancj.materialsearchbar.MaterialSearchBar
-            android:id="@+id/searchBar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:mt_hint="@string/search_hint"
-            app:mt_maxSuggestionsCount="10"
-            app:mt_speechMode="false" />
-
         <!--<LinearLayout android:orientation="horizontal"-->
             <!--android:gravity="center" android:measureWithLargestChild="true"-->
             <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
@@ -63,10 +55,41 @@
                 <!--android:text="@string/tab_favorites"></Button>-->
         <!--</LinearLayout>-->
 
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@color/blueBYUI">
+
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:id="@+id/searchBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/tabs"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:mt_hint="@string/search_hint"
+            app:mt_maxSuggestionsCount="10"
+            app:mt_speechMode="false" />
+
         <android.support.design.widget.TabLayout
             android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:tabBackground="@color/blueBYUI"
             app:tabIndicatorColor="@android:color/holo_orange_dark"
             app:tabSelectedTextColor="@android:color/white"
@@ -93,8 +116,7 @@
                 android:onClick="favorites"
                 android:text="@string/tab_favorites" />
         </android.support.design.widget.TabLayout>
-
-    </android.support.design.widget.AppBarLayout>
+    </android.support.constraint.ConstraintLayout>
 
 
 </android.support.design.widget.CoordinatorLayout>

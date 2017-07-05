@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         getSupportActionBar().setElevation(0);
         this.app = Application.restore(getApplicationContext());
 
-        app.addObserver((Observer) this);
+        app.addObserver(this);
 
         // Populate the list
         list = (ListView) findViewById(R.id.events);
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            final EventItem item = this.app.getEventItems().get(position);
+            final EventItem item = this.getItem(position);
             LayoutInflater layoutInflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View row = layoutInflater.inflate(R.layout.row, parent, false);
 
