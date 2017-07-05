@@ -1,9 +1,15 @@
 package tskaws.app;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 
+import org.json.JSONArray;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -13,10 +19,12 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -44,7 +52,7 @@ public class Crawler {
                         if (result.getHeaders().code() == 200) {
                             try {
                                 List<EventItem> eventItems = Crawler.this.parse(result.getResult().toString().replaceAll("[^\\x20-\\x7e]", ""));
-                                Crawler.this.app.setEventItems(eventItems);
+								merge(eventItems);
                             } catch (IOException e1) {
                                 e1.printStackTrace();
                             } catch (SAXException e1) {
@@ -57,6 +65,49 @@ public class Crawler {
                 });
 	}
 
+	public void merge(final List<EventItem> eventItems) {
+		Ion.with(this.app.getContext())
+				.load("https://tmcd.cloudant.com/student_activities/_all_docs?include_docs=true")
+				.asString()
+				.withResponse()
+				.setCallback(new FutureCallback<Response<String>>() {
+					@Override
+					public void onCompleted(Exception e, Response<String> result) {
+						if (result.getHeaders().code() == 200) {
+							Gson gson = new Gson();
+							Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
+							JsonObject obj = gson.fromJson(result.getResult().toString(), JsonObject.class);
+							JsonArray arr = obj.getAsJsonArray("rows");
+							for(JsonElement jsonItem : arr) {
+								String id = jsonItem.getAsJsonObject().get("id").getAsString();
+								JsonObject doc = jsonItem.getAsJsonObject().get("doc").getAsJsonObject();
+								String guid = doc.get("guid").getAsString();
+								for (EventItem item : eventItems) {
+									if (item.getGuid().equals(guid)) {
+										item.addStar(id);
+									}
+								}
+							}
+
+//							try {
+//
+//							} catch (IOException e1) {
+//								e1.printStackTrace();
+//							} catch (SAXException e1) {
+//								e1.printStackTrace();
+//							} catch (ParserConfigurationException e1) {
+//								e1.printStackTrace();
+//							}
+							finish(eventItems);
+						}
+					}
+				});
+	}
+
+	public void finish(List<EventItem> eventItems) {
+		Crawler.this.app.setEventItems(eventItems);
+	}
+
 	/**
 	 * Given an rss feed as a string, converts it to a list of EventItem.
 	 * @param input rss feed as xml
@@ -66,6 +117,8 @@ public class Crawler {
 	 * @throws ParserConfigurationException
 	 */
 	public List<EventItem> parse(String input) throws IOException, SAXException, ParserConfigurationException {
+
+
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();

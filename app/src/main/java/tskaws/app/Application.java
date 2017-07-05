@@ -79,6 +79,7 @@ public class Application extends Observable {
 
 		return instance;
 	}
+
 	public EventItem findEventById(String id) {
 		for (EventItem item : getEventItems()) {
 			if (item.getGuid().equals(id)) {

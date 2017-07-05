@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.provider.CalendarContract;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by jj_re on 5/31/2017.
@@ -23,6 +25,7 @@ public class EventItem implements Serializable {
     private String imageUrl;
     private boolean isStarred;
     private int totalStars;
+    private List<String> starIds = new ArrayList<String>();
 
     /*
     private Object pictures1;
@@ -66,6 +69,14 @@ public class EventItem implements Serializable {
 
     public void setStarred(boolean starred) {
         isStarred = starred;
+    }
+
+    public void addStar(String id) {
+        this.starIds.add(id);
+    }
+
+    public int getStarsCount(){
+        return this.starIds.size();
     }
 
     public String getTitle() {

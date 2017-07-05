@@ -234,12 +234,15 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
             TextView myTitle = (TextView) row.findViewById(R.id.text1);
             TextView myDate = (TextView) row.findViewById(R.id.date);
+            TextView myStars = (TextView) row.findViewById(R.id.stars);
             ImageView myLogo = (ImageView) row.findViewById(R.id.logo);
             myTitle.setText(item.getTitle());
 
             Format formatter = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
             String theDate = formatter.format(item.getDate());
             myDate.setText(theDate);
+
+            myStars.setText(""+item.getStarsCount());
 
             final CheckBox checkbox = (CheckBox) row.findViewById(R.id.checkbox);
             checkbox.setChecked(item.isStarred());
