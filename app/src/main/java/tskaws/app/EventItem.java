@@ -31,11 +31,8 @@ public class EventItem implements Serializable {
     private boolean isStarred;
     private int totalStars;
     private List<Star> stars = new ArrayList<Star>();
-    /*
-    private Object pictures1;
-    private Object pictures2;
-    */
 
+    /** Default constructor for EventItem */
     public EventItem(){
         this.guid = "";
         this.title = "Untitled Event";
@@ -48,6 +45,7 @@ public class EventItem implements Serializable {
         this.totalStars = 0;
     }
 
+    /** Non-defalut constructor for EventItem */
     public EventItem(String guid, String title, Date date, String description, String category, String link, String imageUrl) {
         this.guid = guid;
         this.title = title;
@@ -59,28 +57,21 @@ public class EventItem implements Serializable {
         this.isStarred = false;
     }
 
-    public String getGuid() {
-        return guid;
-    }
+    public String getGuid()          { return guid;      }
+    public void setGuid(String guid) { this.guid = guid; }
 
-    public void setGuid(String guid) {
-        this.guid = guid;
-    }
+    public boolean isStarred() { return isStarred;    }
 
-    public boolean isStarred() {
-        return isStarred;
-    }
-
+    /** Handles database posting and deleting*/
     public void setStarred(boolean starred) {
         isStarred = starred;
-
-
 
         if (isStarred()) {
             JsonObject jsonObject = new JsonObject();
             String guid = this.getGuid();
             jsonObject.addProperty("guid", guid);
             jsonObject.addProperty("title", this.getTitle());
+
             Ion.with(Application.getInstance().getContext())
                     .load("https://tmcd.cloudant.com/student_activities/")
                     .setJsonObjectBody(jsonObject)
@@ -123,63 +114,33 @@ public class EventItem implements Serializable {
                             }
                             if (EventItem.this.stars.size() > 0)
                                 EventItem.this.stars.remove(0);
+
                         }
                     });
         }
     }
 
-    public void addStar(Star star) {
-        this.stars.add(star);
-    }
+    public void addStar(Star star) { this.stars.add(star);    }
 
-    public int getStarsCount(){
-        return this.stars.size();
-    }
+    public int getStarsCount(){ return this.stars.size(); }
 
-    public String getTitle() {
-        return title;
-    }
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public String getTitle()           { return title;       }
+    public void setTitle(String title) { this.title = title; }
 
-    public String getDescription() {
-        return description;
-    }
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getDescription()                 { return description;             }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getCategory() {
-        return category;
-    }
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public String getCategory()              { return category;          }
+    public void setCategory(String category) { this.category = category; }
 
-    public String getLink() {
-        return link;
-    }
-    public void setLink(String link) {
-        this.link = link;
-    }
+    public String getLink()          { return link;      }
+    public void setLink(String link) { this.link = link; }
 
-    public Date getDate() {
-        return date;
-    }
+    public Date getDate()          { return date;      }
+    public void setDate(Date date) { this.date = date; }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
+    public String getImageUrl()              { return imageUrl;          }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public Intent addToCalendar() {
         Calendar beginTime = Calendar.getInstance();
@@ -208,5 +169,4 @@ public class EventItem implements Serializable {
                 ",\n imageUrl='" + imageUrl + '\'' +
                 "\n}";
     }
-
 }
