@@ -1,5 +1,6 @@
 package tskaws.app;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     MainActivity.MyAdapter adapter = null;
     Application app = null;
     int currentTab = 0;
+    String query;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,27 @@ public class MainActivity extends AppCompatActivity implements Observer {
         customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
         searchBar.setCustomSuggestionAdapter(customSuggestionsAdapter);
         getCategories();
+
+        searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+            @Override
+            public void onSearchStateChanged(boolean enabled) {
+                if (!enabled) {
+                    MainActivity.this.query = null;
+                    MainActivity.this.rerender();
+                }
+            }
+
+            @Override
+            public void onSearchConfirmed(CharSequence text) {
+                MainActivity.this.query = text.toString();
+                searchActivities(text.toString());
+            }
+
+            @Override
+            public void onButtonClicked(int buttonCode) {
+            }
+        });
+
 
         ((TabLayout)this.findViewById(R.id.tabs)).addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -94,6 +117,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
             }
         });
+    }
+
+    private void searchActivities(String query) {
+        rerender();
     }
 
     public void getCategories() {
@@ -206,13 +233,20 @@ public class MainActivity extends AppCompatActivity implements Observer {
         public List<EventItem> filter(List<EventItem> list) {
             List<EventItem> returned = new ArrayList<>();
             for(EventItem item : list) {
-                if ((MainActivity.this.currentTab == 0) // first tab shows everything
-                || (MainActivity.this.currentTab == 1) // @TODO show only trending
-                || (MainActivity.this.currentTab == 2 && item.isStarred()) // show only items starred
-                /*@todo add case for searching and categories here*/
-                ) {
+                if (
+                        // This section is if everything is normal and the search bar is empty
+                        (
+                            ((MainActivity.this.currentTab == 0) // first tab shows everything
+                            || (MainActivity.this.currentTab == 1) // @TODO show only trending
+                            || (MainActivity.this.currentTab == 2 && item.isStarred()) // show only items starred
+                            ) && (query == null) // Search bar is empty
+                        )
+                        || (query != null && item.getTitle().contains(query))) // If a query is in the search bar, it displays that instead.
+                {
                     returned.add(item);
                 }
+
+
             }
             return returned;
         }
