@@ -2,6 +2,11 @@ package tskaws.app;
 
 import android.content.Intent;
 import android.provider.CalendarContract;
+import android.util.Log;
+
+import com.google.gson.JsonObject;
+import com.koushikdutta.async.future.FutureCallback;
+import com.koushikdutta.ion.Ion;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +31,6 @@ public class EventItem implements Serializable {
     private boolean isStarred;
     private int totalStars;
     private List<String> starIds = new ArrayList<String>();
-
     /*
     private Object pictures1;
     private Object pictures2;
@@ -69,6 +73,57 @@ public class EventItem implements Serializable {
 
     public void setStarred(boolean starred) {
         isStarred = starred;
+
+
+
+        if (isStarred()) {
+            JsonObject jsonObject = new JsonObject();
+            String guid = this.getGuid();
+            jsonObject.addProperty("guid", guid);
+            jsonObject.addProperty("title", this.getTitle());
+            Ion.with(Application.getInstance().getContext())
+                    .load("https://tmcd.cloudant.com/student_activities/")
+                    .setJsonObjectBody(jsonObject)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            if (e != null) {
+                                Log.e("Error in", "posting to database");
+                                return;
+                            }
+                            String eventItemId = result.get("id").getAsString();
+                            EventItem.this.starIds.add(eventItemId);
+                        }
+                    });
+        } else {
+            JsonObject jsonObject = new JsonObject();
+            String guid = this.getGuid();
+
+            if (EventItem.this.starIds.size() == 0)
+                return;
+
+            jsonObject.addProperty("_id", this.starIds.get(0));
+            jsonObject.addProperty("_deleted", true);
+
+            Log.e("JsonObject in unstar: ", jsonObject.toString());
+
+            Ion.with(Application.getInstance().getContext())
+                    .load("PUT","https://tmcd.cloudant.com/student_activities/")
+                    .setJsonObjectBody(jsonObject)
+                    .asJsonObject()
+                    .setCallback(new FutureCallback<JsonObject>() {
+                        @Override
+                        public void onCompleted(Exception e, JsonObject result) {
+                            if (e != null) {
+                                Log.e("Error in", "posting to database");
+                                return;
+                            }
+                            if (EventItem.this.starIds.size() > 0)
+                                EventItem.this.starIds.remove(0);
+                        }
+                    });
+        }
     }
 
     public void addStar(String id) {

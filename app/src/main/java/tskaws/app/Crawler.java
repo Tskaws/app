@@ -4,12 +4,10 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.koushikdutta.ion.Response;
 
-import org.json.JSONArray;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -19,12 +17,10 @@ import org.xml.sax.SAXException;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -75,7 +71,6 @@ public class Crawler {
 					public void onCompleted(Exception e, Response<String> result) {
 						if (result.getHeaders().code() == 200) {
 							Gson gson = new Gson();
-							Type stringStringMap = new TypeToken<Map<String, String>>(){}.getType();
 							JsonObject obj = gson.fromJson(result.getResult().toString(), JsonObject.class);
 							JsonArray arr = obj.getAsJsonArray("rows");
 							for(JsonElement jsonItem : arr) {

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +19,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.koushikdutta.async.future.FutureCallback;
-import com.koushikdutta.ion.Ion;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 
@@ -250,25 +247,12 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 @Override
                 public void onClick(View v) {
                     item.setStarred(checkbox.isChecked());
-                    if(item.isStarred()) {
+                    if(checkbox.isChecked()) {
                         // Post to the data base!!!
-                        JsonObject jsonObject = new JsonObject();
-                        String guid = item.getGuid();
-                        jsonObject.addProperty("guid", guid);
-                        jsonObject.addProperty("title", item.getTitle());
-                        Ion.with(v.getContext())
-                                .load("https://tmcd.cloudant.com/student_activities/")
-                                .setJsonObjectBody(jsonObject)
-                                .asJsonObject()
-                                .setCallback(new FutureCallback<JsonObject>() {
-                                    @Override
-                                    public void onCompleted(Exception e, JsonObject result) {
-                                        if (e != null)
-                                            Log.e("Error in", "posting to database");
-                                    }
-                                });
+
                     }
                     MainActivity.this.save();
+
                 }
             });
 
