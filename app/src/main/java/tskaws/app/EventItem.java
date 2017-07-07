@@ -30,7 +30,7 @@ public class EventItem implements Serializable {
     private String imageUrl;
     private boolean isStarred;
     private int totalStars;
-    private List<String> starIds = new ArrayList<String>();
+    private List<Star> stars = new ArrayList<Star>();
     /*
     private Object pictures1;
     private Object pictures2;
@@ -92,24 +92,26 @@ public class EventItem implements Serializable {
                                 Log.e("Error in", "posting to database");
                                 return;
                             }
-                            String eventItemId = result.get("id").getAsString();
-                            EventItem.this.starIds.add(eventItemId);
+                            String id = result.get("id").getAsString();
+                            String rev = result.get("rev").getAsString();
+                            Star star = new Star(id, rev);
+                            EventItem.this.stars.add(star);
                         }
                     });
         } else {
             JsonObject jsonObject = new JsonObject();
             String guid = this.getGuid();
 
-            if (EventItem.this.starIds.size() == 0)
+            if (EventItem.this.stars.size() == 0)
                 return;
 
-            jsonObject.addProperty("_id", this.starIds.get(0));
+            Star star = this.stars.get(0);
+            jsonObject.addProperty("_id", star.getId());
+            jsonObject.addProperty("_rev", star.getRev());
             jsonObject.addProperty("_deleted", true);
 
-            Log.e("JsonObject in unstar: ", jsonObject.toString());
-
             Ion.with(Application.getInstance().getContext())
-                    .load("PUT","https://tmcd.cloudant.com/student_activities/")
+                    .load("PUT","https://tmcd.cloudant.com/student_activities/" + star.getId())
                     .setJsonObjectBody(jsonObject)
                     .asJsonObject()
                     .setCallback(new FutureCallback<JsonObject>() {
@@ -119,19 +121,19 @@ public class EventItem implements Serializable {
                                 Log.e("Error in", "posting to database");
                                 return;
                             }
-                            if (EventItem.this.starIds.size() > 0)
-                                EventItem.this.starIds.remove(0);
+                            if (EventItem.this.stars.size() > 0)
+                                EventItem.this.stars.remove(0);
                         }
                     });
         }
     }
 
-    public void addStar(String id) {
-        this.starIds.add(id);
+    public void addStar(Star star) {
+        this.stars.add(star);
     }
 
     public int getStarsCount(){
-        return this.starIds.size();
+        return this.stars.size();
     }
 
     public String getTitle() {
@@ -178,8 +180,6 @@ public class EventItem implements Serializable {
         this.imageUrl = imageUrl;
     }
 
-    public int getTotalStars()              { return this.totalStars;     }
-    public void setTotalStars(int numStars) { this.totalStars = numStars; }
 
     public Intent addToCalendar() {
         Calendar beginTime = Calendar.getInstance();

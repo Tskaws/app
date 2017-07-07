@@ -76,10 +76,12 @@ public class Crawler {
 							for(JsonElement jsonItem : arr) {
 								String id = jsonItem.getAsJsonObject().get("id").getAsString();
 								JsonObject doc = jsonItem.getAsJsonObject().get("doc").getAsJsonObject();
+								if (doc.get("guid") == null) continue;
 								String guid = doc.get("guid").getAsString();
+								String rev = doc.get("_rev").getAsString();
 								for (EventItem item : eventItems) {
 									if (item.getGuid().equals(guid)) {
-										item.addStar(id);
+										item.addStar(new Star(id, rev));
 									}
 								}
 							}
