@@ -16,6 +16,8 @@ import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import static tskaws.app.MainActivity.FILE_KEY;
+
 /**
  * Created by Jason on 6/5/17.
  */
@@ -121,9 +123,9 @@ public class EventActivity extends AppCompatActivity {
 
     public void save(){
         // @TODO do firebase stuff here
-        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences myPrefs = getSharedPreferences(FILE_KEY, MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
         myPrefsEditor.putString("Application", app.sendAppToJson());
-        myPrefsEditor.apply();
+        myPrefsEditor.commit();
     }
 }

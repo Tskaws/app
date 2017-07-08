@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public static final String EXTRA_MESSAGE = "tskaws.app.MESSAGE";
     public static final String EXTRA_TEXT = "tskaws.app.TEXT";
     public static final String TAG = "Main_Activity";
+    public static final String FILE_KEY= "tskaws.app.PREFERENCE_FILE_KEY";
     private MaterialSearchBar searchBar;
     List<String> suggestions = new ArrayList<>();
     CustomSuggestionsAdapter customSuggestionsAdapter;
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     @Override
     public void onResume(){
         super.onResume();
-        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences myPrefs = getSharedPreferences(FILE_KEY, Context.MODE_PRIVATE);
 
         Gson gson = new Gson();
         String json = myPrefs.getString("Application", "");
@@ -187,10 +188,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
                     });
         }
 */
-        SharedPreferences myPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences myPrefs = getSharedPreferences(FILE_KEY, MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
-        myPrefsEditor.putString("Application", this.app.sendAppToJson()); // this code is breaking
-        myPrefsEditor.apply();
+        myPrefsEditor.putString("Application", app.sendAppToJson());
+        myPrefsEditor.commit();
     }
 
     public void update(Observable o, Object arg) {
