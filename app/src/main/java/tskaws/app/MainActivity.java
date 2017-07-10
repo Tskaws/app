@@ -247,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                             || (MainActivity.this.currentTab == 2 && item.isStarred()) // show only items starred
                             ) && (query == null) // Search bar is empty
                         )
-                        || (query != null && item.getTitle().contains(query))) // If a query is in the search bar, it displays that instead.
+                        || (query != null && item.getTitle().toLowerCase().contains(query.toLowerCase()))) // If a query is in the search bar, it displays that instead.
                 {
                     returned.add(item);
                 }
