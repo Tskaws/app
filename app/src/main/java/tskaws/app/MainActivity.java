@@ -243,7 +243,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
                         // This section is if everything is normal and the search bar is empty
                         (
                             ((MainActivity.this.currentTab == 0) // first tab shows everything
-                            || (MainActivity.this.currentTab == 1) // @TODO show only trending
+                            || (MainActivity.this.currentTab == 1 && (item.getStarsCount() > 0)) // @TODO show only trending
                             || (MainActivity.this.currentTab == 2 && item.isStarred()) // show only items starred
                             ) && (query == null) // Search bar is empty
                         )
