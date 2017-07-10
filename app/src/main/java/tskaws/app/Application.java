@@ -42,7 +42,7 @@ public class Application extends Observable {
 		boolean found = false;
 		for(EventItem iter : eventList) {
 			if (iter.getGuid() == item.getGuid()) {
-				iter.setStarred(starred);
+				iter.setStarred(starred, false);
 				found = true;
 				break;
 			}

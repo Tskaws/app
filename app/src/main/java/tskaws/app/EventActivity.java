@@ -88,7 +88,7 @@ public class EventActivity extends AppCompatActivity {
         checkbox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                event.setStarred(checkbox.isChecked());
+                event.setStarred(checkbox.isChecked(), true);
                 EventActivity.this.save();
             }
         });

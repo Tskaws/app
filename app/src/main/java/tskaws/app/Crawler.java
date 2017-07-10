@@ -86,15 +86,7 @@ public class Crawler {
 								}
 							}
 
-//							try {
-//
-//							} catch (IOException e1) {
-//								e1.printStackTrace();
-//							} catch (SAXException e1) {
-//								e1.printStackTrace();
-//							} catch (ParserConfigurationException e1) {
-//								e1.printStackTrace();
-//							}
+
 							finish(eventItems);
 						}
 					}
@@ -114,8 +106,6 @@ public class Crawler {
 	 * @throws ParserConfigurationException
 	 */
 	public List<EventItem> parse(String input) throws IOException, SAXException, ParserConfigurationException {
-
-
 
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder = factory.newDocumentBuilder();
@@ -163,7 +153,7 @@ public class Crawler {
 
 				for(EventItem item : existingList) {
 					if (item.getGuid().equals(event.getGuid()) && item.isStarred()) {
-						event.setStarred(true);
+						event.setStarred(true, false);
 						break;
 					}
 				}

@@ -48,7 +48,7 @@
         android:layout_width="0dp"
         android:layout_height="439dp"
         android:layout_marginBottom="7dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="-5dp"
         android:label="@string/activity_name"
         android:orientation="vertical"
         android:weightSum="1"

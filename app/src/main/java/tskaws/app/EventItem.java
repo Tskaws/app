@@ -63,66 +63,81 @@ public class EventItem implements Serializable {
     public boolean isStarred() { return isStarred;    }
 
     /** Handles database posting and deleting*/
-    public void setStarred(boolean starred) {
-        isStarred = starred;
+    public void setStarred(boolean starred, boolean sendToServer) {
+        if (starred == this.isStarred) return;
 
-        if (isStarred()) {
-            JsonObject jsonObject = new JsonObject();
-            String guid = this.getGuid();
-            jsonObject.addProperty("guid", guid);
-            jsonObject.addProperty("title", this.getTitle());
+        if (sendToServer) {
+            if (starred) {
+                JsonObject jsonObject = new JsonObject();
+                String guid = this.getGuid();
+                jsonObject.addProperty("guid", guid);
+                jsonObject.addProperty("title", this.getTitle());
 
-            Ion.with(Application.getInstance().getContext())
-                    .load("https://tmcd.cloudant.com/student_activities/")
-                    .setJsonObjectBody(jsonObject)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            if (e != null) {
-                                Log.e("Error in", "posting to database");
-                                return;
+                Ion.with(Application.getInstance().getContext())
+                        .load("https://tmcd.cloudant.com/student_activities/")
+                        .setJsonObjectBody(jsonObject)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                if (e != null) {
+                                    Log.e("Error in", "posting to database");
+                                    return;
+                                }
+                                String id = result.get("id").getAsString();
+                                String rev = result.get("rev").getAsString();
+                                Star star = new Star(id, rev);
+                                EventItem.this.stars.add(star);
                             }
-                            String id = result.get("id").getAsString();
-                            String rev = result.get("rev").getAsString();
-                            Star star = new Star(id, rev);
-                            EventItem.this.stars.add(star);
-                        }
-                    });
-        } else {
-            JsonObject jsonObject = new JsonObject();
-            String guid = this.getGuid();
+                        });
+            } else {
+                JsonObject jsonObject = new JsonObject();
+                String guid = this.getGuid();
 
-            if (EventItem.this.stars.size() == 0)
-                return;
+                if (EventItem.this.stars.size() == 0)
+                    return;
 
-            Star star = this.stars.get(0);
-            jsonObject.addProperty("_id", star.getId());
-            jsonObject.addProperty("_rev", star.getRev());
-            jsonObject.addProperty("_deleted", true);
+                Star star = this.stars.get(0);
+                jsonObject.addProperty("_id", star.getId());
+                jsonObject.addProperty("_rev", star.getRev());
+                jsonObject.addProperty("_deleted", true);
 
-            Ion.with(Application.getInstance().getContext())
-                    .load("PUT","https://tmcd.cloudant.com/student_activities/" + star.getId())
-                    .setJsonObjectBody(jsonObject)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            if (e != null) {
-                                Log.e("Error in", "posting to database");
-                                return;
+                Ion.with(Application.getInstance().getContext())
+                        .load("PUT", "https://tmcd.cloudant.com/student_activities/" + star.getId())
+                        .setJsonObjectBody(jsonObject)
+                        .asJsonObject()
+                        .setCallback(new FutureCallback<JsonObject>() {
+                            @Override
+                            public void onCompleted(Exception e, JsonObject result) {
+                                if (e != null) {
+                                    Log.e("Error in", "posting to database");
+                                    return;
+                                }
+                                if (EventItem.this.stars.size() > 0)
+                                    EventItem.this.stars.remove(0);
+
                             }
-                            if (EventItem.this.stars.size() > 0)
-                                EventItem.this.stars.remove(0);
-
-                        }
-                    });
+                        });
+            }
         }
+
+        isStarred = starred;
     }
 
-    public void addStar(Star star) { this.stars.add(star);    }
+    public void addStar(Star star) {
+        for(Star existing : this.stars) {
+            if (existing.getId() == star.getId())
+                return;
+        }
+
+        this.stars.add(star);
+    }
 
     public int getStarsCount(){ return this.stars.size(); }
+
+    public void clearStars(){
+        this.stars.clear();
+    }
 
     public String getTitle()           { return title;       }
     public void setTitle(String title) { this.title = title; }

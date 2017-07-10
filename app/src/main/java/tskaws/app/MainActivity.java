@@ -157,6 +157,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
             List<EventItem> newEvents = new ArrayList<>();
             newEvents = gson.fromJson(json, new TypeToken<List<EventItem>>() {
             }.getType());
+            // Clear stars
+            for(EventItem item : newEvents) {
+                item.clearStars();
+            }
             app.setEventItems(newEvents);
         }
     }
@@ -276,20 +280,15 @@ public class MainActivity extends AppCompatActivity implements Observer {
             String theDate = formatter.format(item.getDate());
             myDate.setText(theDate);
 
-            myStars.setText(""+item.getStarsCount());
+            myStars.setText(""+item.getStarsCount() + " Star" + (item.getStarsCount() != 1 ? "s" : ""));
 
             final CheckBox checkbox = (CheckBox) row.findViewById(R.id.checkbox);
             checkbox.setChecked(item.isStarred());
             checkbox.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    item.setStarred(checkbox.isChecked());
-                    if(checkbox.isChecked()) {
-                        // Post to the data base!!!
-
-                    }
+                    item.setStarred(checkbox.isChecked(), true);
                     MainActivity.this.save();
-
                 }
             });
 
