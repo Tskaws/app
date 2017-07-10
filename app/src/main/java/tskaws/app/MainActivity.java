@@ -16,6 +16,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -246,8 +247,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 {
                     returned.add(item);
                 }
-
-
+            }
+            if (returned.size() == 0) {
+                Toast.makeText(MainActivity.this, "You have no favorites yet...", Toast.LENGTH_LONG).show();
             }
             return returned;
         }

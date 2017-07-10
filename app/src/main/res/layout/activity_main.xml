@@ -27,35 +27,13 @@
         android:layout_height="wrap_content"
         app:elevation="4dp">
 
-
-        <!--<LinearLayout android:orientation="horizontal"-->
-            <!--android:gravity="center" android:measureWithLargestChild="true"-->
-            <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
-            <!--android:layout_weight="0">-->
-
-            <!--<Button-->
-                <!--android:id="@+id/goto_feed"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="feed"-->
-                <!--android:text="@string/tab_feed"></Button>-->
-
-            <!--<Button-->
-                <!--android:id="@+id/goto_trending"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="trending"-->
-                <!--android:text="@string/tab_trending"></Button>-->
-
-            <!--<Button-->
-                <!--android:id="@+id/goto_favorites"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:onClick="favorites"-->
-                <!--android:text="@string/tab_favorites"></Button>-->
-        <!--</LinearLayout>-->
-
     </android.support.design.widget.AppBarLayout>
+
+    <TextView
+        android:id="@+id/noActivities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You have no favorite activities." />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
