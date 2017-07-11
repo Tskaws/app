@@ -29,7 +29,7 @@ public class EventItem implements Serializable {
     private String link;
     private String imageUrl;
     private boolean isStarred;
-    private int totalStars;
+    //private int totalStars;
     private List<Star> stars = new ArrayList<Star>();
 
     /** Default constructor for EventItem */
@@ -42,7 +42,7 @@ public class EventItem implements Serializable {
         this.link = "";
         this.imageUrl = "";
         this.isStarred = false;
-        this.totalStars = 0;
+//        this.totalStars = 0;
     }
 
     /** Non-defalut constructor for EventItem */

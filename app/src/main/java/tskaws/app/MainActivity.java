@@ -1,6 +1,5 @@
 package tskaws.app;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -250,6 +249,9 @@ public class MainActivity extends AppCompatActivity implements Observer {
                         || (query != null && item.getTitle().toLowerCase().contains(query.toLowerCase()))) // If a query is in the search bar, it displays that instead.
                 {
                     returned.add(item);
+                } else if (MainActivity.this.currentTab == 1) {
+                    //@TODO
+                    
                 }
             }
             if (returned.size() == 0) {
