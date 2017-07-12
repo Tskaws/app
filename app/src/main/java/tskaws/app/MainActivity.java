@@ -8,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
     CustomSuggestionsAdapter customSuggestionsAdapter;
 
     ListView list;
-    MainActivity.MyAdapter adapter = null;
+    MainActivity.ActivityListAdapter adapter = null;
     Application app = null;
     int currentTab = 0;
     String query;
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         // Populate the list
         list = (ListView) findViewById(R.id.events);
-        this.adapter = new MainActivity.MyAdapter(this, app);
+        this.adapter = new MainActivity.ActivityListAdapter(this, app);
         list.setAdapter(this.adapter);
 
         // Create suggestions for the search bar
@@ -72,7 +71,20 @@ public class MainActivity extends AppCompatActivity implements Observer {
         customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
         searchBar.setCustomSuggestionAdapter(customSuggestionsAdapter);
         getCategories();
-        searchBar.inflateMenu(R.menu.main);
+
+        // Categories!
+        searchBar.inflateMenu(R.menu.categories);
+        searchBar.getMenu().setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                query = item.getTitle().toString();
+                MainActivity.this.rerender();
+                searchBar.setText(query);
+                return false;
+            }
+        });
+
 
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -86,7 +98,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
             @Override
             public void onSearchConfirmed(CharSequence text) {
                 MainActivity.this.query = text.toString();
-                searchActivities(text.toString());
+                rerender();
+                searchBar.clearFocus();
             }
 
             @Override
@@ -123,10 +136,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
             }
         });
-    }
-
-    private void searchActivities(String query) {
-        rerender();
     }
 
     public void getCategories() {
@@ -231,11 +240,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
     /** Using the row.xml layout create an adapter for the strings to
       *  adapt the list for display. Code inspired by https://www.youtube.com/watch?v=D0or0X12FMM
      **/
-    class MyAdapter extends ArrayAdapter<EventItem> {
+    class ActivityListAdapter extends ArrayAdapter<EventItem> {
         Context context;
         Application app;
 
-        MyAdapter(Context c, Application app) {
+        ActivityListAdapter(Context c, Application app) {
             super(c, R.layout.row, R.id.text1, app.getEventItems());
             this.context = c;
             this.app = app;
@@ -251,17 +260,22 @@ public class MainActivity extends AppCompatActivity implements Observer {
                             || (MainActivity.this.currentTab == 2 && item.isStarred()) // show only items starred
                             ) && (query == null) // Search bar is empty
                         )
-                        || (query != null && item.getTitle().toLowerCase().contains(query.toLowerCase()))) // If a query is in the search bar, it displays that instead.
+                        || (query != null && (item.getTitle().toLowerCase().contains(query.toLowerCase())
+                                        || item.getCategory().toLowerCase().contains(query.toLowerCase()))
+                        ) // If a query is in the search bar, it displays that instead.
+                    )
                 {
+
                     returned.add(item);
+
                 } else if (MainActivity.this.currentTab == 1) {
-                    //@TODO
                     if (item.getStarsCount() > 0)
                         returned.add(item);
                 }
             }
+            // Tells the user there are no activities if the list is empty.
             if (returned.size() == 0) {
-                Toast.makeText(MainActivity.this, "You have no favorites yet...", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "There are no activities here.", Toast.LENGTH_LONG).show();
             }
 
             if (MainActivity.this.currentTab == 1) {
@@ -356,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         @Override
         public int getSingleViewHeight() {
-            return 19;
+            return 0;
         }
 
     }
