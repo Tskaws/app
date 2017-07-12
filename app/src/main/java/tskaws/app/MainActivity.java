@@ -26,6 +26,7 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Observable;
@@ -258,10 +259,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 Toast.makeText(MainActivity.this, "You have no favorites yet...", Toast.LENGTH_LONG).show();
             }
 
-//            if (MainActivity.this.currentTab == 1) {
-//                Collections.sort(returned);
-//                return returned;
-//            }
+            if (MainActivity.this.currentTab == 1) {
+                Collections.sort(returned);
+                Collections.reverse(returned);
+                return returned;
+           }
             return returned;
         }
 
