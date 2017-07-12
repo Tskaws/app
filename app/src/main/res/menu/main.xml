@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Item 1"/>
-    <item android:title="Item 2"/>
-    <item android:title="Item 3"/>
+    <item android:title="Activities/Fitness"/>
+    <item android:title="Activities/Life Skills"/>
+    <item android:title="Activities/Outdoor"/>
+    <item android:title="Activities/Service"/>
+    <item android:title="Activities/Social"/>
+    <item android:title="Activities/Sports"/>
+    <item android:title="Alumni Event or Reunion"/>
+    <item android:title="Art Shows"/>
+    <item android:title="Graduation"/>
+    <item android:title="Institutional Event"/>
+    <item android:title="Presentation/Lecture"/>
+    <item android:title="Recital, Student"/>
+    <item android:title="Theatre Production"/>
+
 </menu>

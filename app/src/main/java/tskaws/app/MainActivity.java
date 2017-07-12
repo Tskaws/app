@@ -6,8 +6,11 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -69,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
         searchBar.setCustomSuggestionAdapter(customSuggestionsAdapter);
         getCategories();
+        searchBar.inflateMenu(R.menu.main);
 
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
@@ -129,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
         List<EventItem>  eventList = app.getEventItems();
         customSuggestionsAdapter.clearSuggestions();
         List<String> added = new ArrayList<>();
+
 
         for(EventItem item : eventList) {
             boolean found = false;
