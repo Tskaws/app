@@ -2,6 +2,7 @@ package tskaws.app;
 
 import android.content.Intent;
 import android.provider.CalendarContract;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.gson.JsonObject;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by jj_re on 5/31/2017.
  */
 
-public class EventItem implements Serializable {
+public class EventItem implements Serializable, Comparable<EventItem> {
 
     // Class member variables
     private String guid;
@@ -183,5 +184,10 @@ public class EventItem implements Serializable {
                 ",\n link='" + link + '\'' +
                 ",\n imageUrl='" + imageUrl + '\'' +
                 "\n}";
+    }
+
+    @Override
+    public int compareTo(@NonNull EventItem eventItem) {
+        return this.getStarsCount() - eventItem.getStarsCount();
     }
 }
