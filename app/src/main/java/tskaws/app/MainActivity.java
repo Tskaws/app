@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
     public static final String FILE_KEY= "tskaws.app.PREFERENCE_FILE_KEY";
     private MaterialSearchBar searchBar;
     List<String> suggestions = new ArrayList<>();
-    CustomSuggestionsAdapter customSuggestionsAdapter;
 
     ListView list;
     MainActivity.ActivityListAdapter adapter = null;
@@ -68,9 +67,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         // Create suggestions for the search bar
         searchBar = (MaterialSearchBar) findViewById(R.id.searchBar);
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        customSuggestionsAdapter = new CustomSuggestionsAdapter(inflater);
-        searchBar.setCustomSuggestionAdapter(customSuggestionsAdapter);
-        getCategories();
 
         // Categories!
         searchBar.inflateMenu(R.menu.categories);
@@ -138,28 +134,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         });
     }
 
-    public void getCategories() {
-        List<EventItem>  eventList = app.getEventItems();
-        customSuggestionsAdapter.clearSuggestions();
-        List<String> added = new ArrayList<>();
-
-
-        for(EventItem item : eventList) {
-            boolean found = false;
-            for(String existing : added) {
-                if (existing.equals(item.getCategory())) {
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                added.add(item.getCategory());
-                customSuggestionsAdapter.addSuggestion(item.getCategory());
-            }
-        }
-    }
-
-
     @Override
     public void onResume(){
         super.onResume();
@@ -219,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     public void rerender(){
         this.adapter.reload();
-        getCategories();
     }
 
     public void feed() {
@@ -341,39 +314,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         }
     }
 
-    static class SuggestionHolder extends RecyclerView.ViewHolder{
-        protected TextView title;
-
-        public SuggestionHolder(View itemView) {
-            super(itemView);
-            title = (TextView) itemView.findViewById(R.id.Title);
-        }
-    }
-
-    public class CustomSuggestionsAdapter extends SuggestionsAdapter<String, SuggestionHolder> {
-
-
-        public CustomSuggestionsAdapter(LayoutInflater inflater) {
-            super(inflater);
-        }
-
-        @Override
-        public void onBindSuggestionHolder(String suggestion, SuggestionHolder holder, int position) {
-            holder.title.setText(suggestion);
-        }
-
-        @Override
-        public SuggestionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.suggestion, parent, false);
-            return new SuggestionHolder(view);
-        }
-
-        @Override
-        public int getSingleViewHeight() {
-            return 0;
-        }
-
-    }
 }
 
 /* I love you all */
