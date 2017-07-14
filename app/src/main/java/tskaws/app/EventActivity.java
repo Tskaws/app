@@ -72,7 +72,7 @@ public class EventActivity extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.calendarButton);
         button.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                startActivity(event.addToCalendar());
+                startActivity(app.addToCalendar(event));
             }
         });
 
@@ -95,6 +95,10 @@ public class EventActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Event handler for sharing events to facebook
+     * @param event
+     */
     public void shareEvent (EventItem event) {
         String urlToShare = event.getLink();
         Intent fIntent = new Intent(Intent.ACTION_SEND);
@@ -121,11 +125,13 @@ public class EventActivity extends AppCompatActivity {
         startActivity(fIntent);
     }
 
+    /**
+     * Serialize to disk
+     */
     public void save(){
-        // @TODO do firebase stuff here
         SharedPreferences myPrefs = getSharedPreferences(FILE_KEY, MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
-        myPrefsEditor.putString("Application", app.sendAppToJson());
+        myPrefsEditor.putString("Application", app.toJson());
         myPrefsEditor.commit();
     }
 }

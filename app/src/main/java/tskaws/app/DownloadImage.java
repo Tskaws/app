@@ -10,10 +10,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by ryan on 6/23/17.
- */
-
 class DownloadImage extends AsyncTask<String, Void, Bitmap> {
     ImageView image;
     Map<String, Bitmap> cache = new HashMap<String, Bitmap>();

@@ -30,12 +30,17 @@ public class Crawler {
 	private static String urlString = "http://calendar.byui.edu/RSSFeeds.aspx?data=tq9cbc8b%2btuQeZGvCTEMSP%2bfv3SYIrjQ3VTAXA335bE0WtJCqYU4mp9MMtuSlz6MRZ4LbMUU%2fO4%3d";
 	public Application app;
 
+	/**
+	 * Constructs a new crawler
+	 * Crawler must have a refrence to app for callbacks
+	 * @param app
+	 */
 	public Crawler(Application app) {
 		this.app = app;
 	}
 
 	/**
-	 * Primary entry function for the crawler.
+	 * Run the crawler and it's steps
 	 */
 	public void run() {
 		Ion.with(this.app.getContext())
@@ -61,6 +66,18 @@ public class Crawler {
                 });
 	}
 
+	/**
+	 * Call the application callback and set event items
+	 * @param eventItems
+	 */
+	public void finish(List<EventItem> eventItems) {
+		this.app.setEventItems(eventItems);
+	}
+
+	/**
+	 * Merges the XML crawled eventItems with their corresponding stars in couchdb.
+	 * @param eventItems
+	 */
 	public void merge(final List<EventItem> eventItems) {
 		Ion.with(this.app.getContext())
 				.load("https://tmcd.cloudant.com/student_activities/_all_docs?include_docs=true")
@@ -91,10 +108,6 @@ public class Crawler {
 						}
 					}
 				});
-	}
-
-	public void finish(List<EventItem> eventItems) {
-		Crawler.this.app.setEventItems(eventItems);
 	}
 
 	/**

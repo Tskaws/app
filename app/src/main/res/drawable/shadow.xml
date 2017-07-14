@@ -19,6 +19,22 @@
 
             <corners android:radius="3dp" />
         </shape>
+        <shape>
+            <!-- set the shadow color here -->
+            <stroke
+                android:width="3dp"
+                android:color="#eeeeee" />
+
+            <!-- setting the thickness of shadow (positive value will give shadow on that side) -->
+
+            <padding
+                android:bottom="2dp"
+                android:left="2dp"
+                android:right="2dp"
+                android:top="2dp" />
+
+            <corners android:radius="3dp" />
+        </shape>
     </item>
 
     <!-- Background -->

@@ -1,9 +1,5 @@
 package tskaws.app;
 
-/**
- * Created by ryan on 7/7/17.
- */
-
 public class Star {
     private String id;
     private String rev;

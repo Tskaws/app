@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 */
         SharedPreferences myPrefs = getSharedPreferences(FILE_KEY, MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
-        myPrefsEditor.putString("Application", app.sendAppToJson());
+        myPrefsEditor.putString("Application", app.toJson());
         myPrefsEditor.commit();
     }
 
