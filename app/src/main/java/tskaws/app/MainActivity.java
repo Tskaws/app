@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
             @Override
             public void onSearchConfirmed(CharSequence text) {
                 MainActivity.this.query = text.toString();
-                rerender();
+                MainActivity.this.rerender();
                 searchBar.clearFocus();
             }
 
@@ -162,25 +162,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         JsonObject jsonObject = new JsonObject();
 
-        // @TODO add logic to add stars to database when an event gets starred
-/*        for (int i = 0; i < app.getEventItems().size(); i++) {
-            String guid = app.getEventItems().get(i).getGuid();
-            int numStars = app.getEventItems().get(i).getTotalStars();
-            jsonObject.addProperty("guid", guid);
-            jsonObject.addProperty("numStars", numStars);
-            Ion.with(this.getApplicationContext())
-                    .load("https://tmcd.cloudant.com/student_activities/")
-                    .setJsonObjectBody(jsonObject)
-                    .asJsonObject()
-                    .setCallback(new FutureCallback<JsonObject>() {
-                        @Override
-                        public void onCompleted(Exception e, JsonObject result) {
-                            if (e != null)
-                                Log.e("Error in", "posting to database");
-                        }
-                    });
-        }
-*/
         SharedPreferences myPrefs = getSharedPreferences(FILE_KEY, MODE_PRIVATE);
         SharedPreferences.Editor myPrefsEditor = myPrefs.edit();
         myPrefsEditor.putString("Application", app.toJson());
@@ -238,7 +219,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
                         ) // If a query is in the search bar, it displays that instead.
                     )
                 {
-
                     returned.add(item);
 
                 } else if (MainActivity.this.currentTab == 1) {
