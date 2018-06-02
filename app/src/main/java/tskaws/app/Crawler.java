@@ -80,7 +80,7 @@ public class Crawler {
 	 */
 	public void merge(final List<EventItem> eventItems) {
 		Ion.with(this.app.getContext())
-				.load("https://tmcd.cloudant.com/student_activities/_all_docs?include_docs=true")
+				.load("https://db.synvox.net/student_activities/_all_docs?include_docs=true")
 				.asString()
 				.withResponse()
 				.setCallback(new FutureCallback<Response<String>>() {
