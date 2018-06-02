@@ -25,13 +25,13 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
     private String link;
     private String imageUrl;
     private boolean isStarred;
-    //private int totalStars;
+    // private int totalStars;
     private List<Star> stars = new ArrayList<Star>();
 
     /**
      * Construct empty event item with defaults
      */
-    public EventItem(){
+    public EventItem() {
         this.guid = "";
         this.title = "Untitled Event";
         this.date = null;
@@ -40,11 +40,12 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
         this.link = "";
         this.imageUrl = "";
         this.isStarred = false;
-//        this.totalStars = 0;
+        // this.totalStars = 0;
     }
 
     /**
      * Constructs event item with all options open.
+     * 
      * @param guid
      * @param title
      * @param date
@@ -53,7 +54,8 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
      * @param link
      * @param imageUrl
      */
-    public EventItem(String guid, String title, Date date, String description, String category, String link, String imageUrl) {
+    public EventItem(String guid, String title, Date date, String description, String category, String link,
+            String imageUrl) {
         this.guid = guid;
         this.title = title;
         this.date = date;
@@ -64,20 +66,28 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
         this.isStarred = false;
     }
 
+    public String getGuid() {
+        return guid;
+    }
 
-    public String getGuid()          { return guid;      }
-    public void setGuid(String guid) { this.guid = guid; }
+    public void setGuid(String guid) {
+        this.guid = guid;
+    }
 
-    public boolean isStarred() { return isStarred;    }
+    public boolean isStarred() {
+        return isStarred;
+    }
 
     /**
      * Setter for isStarred
+     * 
      * @todo this could be refactored to the applicaiton star item method.
      * @param starred
      * @param sendToServer
      */
     public void setStarred(boolean starred, boolean sendToServer) {
-        if (starred == this.isStarred) return;
+        if (starred == this.isStarred)
+            return;
 
         if (sendToServer) {
             if (starred) {
@@ -86,11 +96,8 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
                 jsonObject.addProperty("guid", guid);
                 jsonObject.addProperty("title", this.getTitle());
 
-                Ion.with(Application.getInstance().getContext())
-                        .load("https://tmcd.cloudant.com/student_activities/")
-                        .setJsonObjectBody(jsonObject)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
+                Ion.with(Application.getInstance().getContext()).load("https://db.synvox.net/student_activities/")
+                        .setJsonObjectBody(jsonObject).asJsonObject().setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 if (e != null) {
@@ -116,10 +123,8 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
                 jsonObject.addProperty("_deleted", true);
 
                 Ion.with(Application.getInstance().getContext())
-                        .load("PUT", "https://tmcd.cloudant.com/student_activities/" + star.getId())
-                        .setJsonObjectBody(jsonObject)
-                        .asJsonObject()
-                        .setCallback(new FutureCallback<JsonObject>() {
+                        .load("PUT", "https://db.synvox.net/student_activities/" + star.getId())
+                        .setJsonObjectBody(jsonObject).asJsonObject().setCallback(new FutureCallback<JsonObject>() {
                             @Override
                             public void onCompleted(Exception e, JsonObject result) {
                                 if (e != null) {
@@ -139,10 +144,11 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
 
     /**
      * Adds a star to the item and ensures no duplicates
+     * 
      * @param star
      */
     public void addStar(Star star) {
-        for(Star existing : this.stars) {
+        for (Star existing : this.stars) {
             if (existing.getId() == star.getId())
                 return;
         }
@@ -150,11 +156,11 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
         this.stars.add(star);
     }
 
-    public int getStarsCount(){
+    public int getStarsCount() {
         return this.stars.size();
     }
 
-    public void clearStars(){
+    public void clearStars() {
         this.stars.clear();
     }
 
@@ -193,6 +199,7 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
     public Date getDate() {
         return date;
     }
+
     public void setDate(Date date) {
         this.date = date;
     }
@@ -207,19 +214,14 @@ public class EventItem implements Serializable, Comparable<tskaws.app.EventItem>
 
     /**
      * Custom toString for debugging
+     * 
      * @return
      */
     @Override
     public String toString() {
-        return "EventItem {" +
-                "\n guid='" + guid + '\'' +
-                ",\n title='" + title + '\'' +
-                ",\n date='" + date + '\'' +
-                ",\n description='" + description + '\'' +
-                ",\n category='" + category + '\'' +
-                ",\n link='" + link + '\'' +
-                ",\n imageUrl='" + imageUrl + '\'' +
-                "\n}";
+        return "EventItem {" + "\n guid='" + guid + '\'' + ",\n title='" + title + '\'' + ",\n date='" + date + '\''
+                + ",\n description='" + description + '\'' + ",\n category='" + category + '\'' + ",\n link='" + link
+                + '\'' + ",\n imageUrl='" + imageUrl + '\'' + "\n}";
     }
 
     @Override
